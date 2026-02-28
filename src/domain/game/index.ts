@@ -4,12 +4,7 @@ export type {
   Cell,
   Board,
   Position,
-  Direction,
   GameState,
-  GameMode,
-  PlayerColor,
-  GameConfig,
-  GameStatus,
   WinnerResult,
 } from './types';
 
