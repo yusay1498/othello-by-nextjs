@@ -27,3 +27,6 @@ export { createInitialBoard, getScore, getOpponent } from './board';
 
 // ルール関数のエクスポート
 export { getLegalMoves, applyMove, isGameOver } from './rules';
+
+// 勝敗判定関数のエクスポート
+export { getGameResult } from './winner';
