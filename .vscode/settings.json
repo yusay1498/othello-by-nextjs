@@ -22,6 +22,11 @@
     "typescriptreact": true
   },
   "github.copilot.editor.enableAutoCompletions": true,
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "file": ".github/copilot-commit-instructions.md"
+    }
+  ],
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
