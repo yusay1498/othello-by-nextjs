@@ -25,3 +25,6 @@ export { getLegalMoves, applyMove, isGameOver } from './rules';
 
 // 勝敗判定関数のエクスポート
 export { getGameResult } from './winner';
+
+// AI関数のエクスポート
+export { evaluateBoard, getBestMove } from './ai';
