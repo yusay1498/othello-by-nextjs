@@ -25,7 +25,8 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
     cp "$COMMIT_MSG_FILE" "$TEMP_FILE" 2>/dev/null || true
 
     # 詳細な変更内容を取得（Copilotへのコンテキスト情報）
-    FULL_DIFF=$(git diff --cached --no-color)
+    # 大容量リポジトリでのメモリ効率化のためパイプで直接絞り込む
+    FULL_DIFF=$(git diff --cached --no-color | head -500)
     
     # 追加された行から主要な変更を抽出
     ADDED_LINES=$(echo "$FULL_DIFF" | grep "^+" | grep -v "^+++" | head -50)
@@ -35,8 +36,6 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
     ADDED_FUNCTIONS=""
     ADDED_CLASSES=""
     ADDED_IMPORTS=""
-    ADDED_EXPORTS=""
-    MODIFIED_FUNCTIONS=""
     CONFIG_CHANGES=""
     
     # TypeScript/JavaScript関数の追加を検出
@@ -68,7 +67,6 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
     
     # 初期メッセージを生成
     INITIAL_MSG=""
-    CHANGE_SUMMARY=""
     
     if [ "$FILE_COUNT" -eq 1 ]; then
       STATUS=$(echo "$STAGED_STATUS" | awk '{print $1}')
@@ -103,7 +101,7 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
             else
               INITIAL_MSG="Add ${FILE_NAME} hook"
             fi
-          elif echo "$FILE_PATH" | grep -qE "lib|utils"; then
+          elif echo "$FILE_PATH" | grep -qE '(^|/)lib(/|$)|(^|/)utils(/|$)'; then
             UTIL_FUNC=$(echo "$ADDED_LINES" | grep -E "^\\+\\s*(export\\s+)?(const|function)\\s+[a-z]" | head -1 | sed -E 's/.*(const|function)\s+([a-zA-Z_][a-zA-Z0-9_]*).*/\2/')
             if [ -n "$UTIL_FUNC" ]; then
               INITIAL_MSG="Add $UTIL_FUNC utility function"
@@ -138,7 +136,9 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
             FUNC_NAME=$(echo "$ADDED_FUNCTIONS" | head -1 | sed -E 's/.*(function|const)\s+([a-zA-Z_][a-zA-Z0-9_]*).*/\2/')
             if [ -n "$FUNC_NAME" ]; then
               INITIAL_MSG="Add $FUNC_NAME function to $FILE_NAME"
-              CHANGE_SUMMARY="New function: $FUNC_NAME"
+            else
+              # 関数名の抽出に失敗した場合はデフォルトのメッセージを設定
+              INITIAL_MSG="Update $FILE_NAME"
             fi
           # コンポーネントの修正
           elif [ -n "$REACT_COMPONENTS" ] && [ -n "$ADDED_CLASSES" ]; then
@@ -191,15 +191,21 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
       MODIFIED_FILES=$(echo "$STAGED_STATUS" | grep -c "^M" || echo "0")
       DELETED_FILES=$(echo "$STAGED_STATUS" | grep -c "^D" || echo "0")
       
-      # ディレクトリ情報を一度だけ取得
-      FILE_DIRS=$(echo "$STAGED_STATUS" | awk '{print $NF}' | xargs -I{} dirname {})
+      # ディレクトリ情報を一度だけ取得（スペースを含むパスにも対応）
+      FILE_DIRS=$(echo "$STAGED_STATUS" | awk '{print $NF}' | while IFS= read -r line; do dirname "$line"; done)
       COMMON_DIR=$(echo "$FILE_DIRS" | sort -u | head -1)
       UNIQUE_DIRS=$(echo "$FILE_DIRS" | sort -u | wc -l | tr -d ' ')
       
-      # コンポーネントとテストのセット
-      if echo "$STAGED_STATUS" | grep -qE "components" && echo "$STAGED_STATUS" | grep -qE "test|spec"; then
-        COMPONENT_FILE=$(echo "$STAGED_STATUS" | grep "components" | head -1 | awk '{print $NF}' | xargs basename | sed 's/\..*//')
-        INITIAL_MSG="Add $COMPONENT_FILE component with tests"
+      # コンポーネントとテストのセット（test/specパターンを厳密にマッチ）
+      if echo "$STAGED_STATUS" | grep -qE "components" && echo "$STAGED_STATUS" | awk '{print $NF}' | grep -qE '(^|/)(test|spec|__tests__)/|[._-](test|spec)\.[a-z]+$'; then
+        # 新規追加のコンポーネントかどうかを確認
+        if echo "$STAGED_STATUS" | grep -q "^A.*components"; then
+          COMPONENT_FILE=$(echo "$STAGED_STATUS" | grep "^A.*components" | head -1 | awk '{print $NF}' | while IFS= read -r line; do basename "$line"; done | sed 's/\..*//')
+          INITIAL_MSG="Add $COMPONENT_FILE component with tests"
+        else
+          COMPONENT_FILE=$(echo "$STAGED_STATUS" | grep "components" | head -1 | awk '{print $NF}' | while IFS= read -r line; do basename "$line"; done | sed 's/\..*//')
+          INITIAL_MSG="Update $COMPONENT_FILE component with tests"
+        fi
       # 全て同じディレクトリの場合
       elif [ "$UNIQUE_DIRS" -eq 1 ]; then
         DIR_NAME=$(basename "$COMMON_DIR")
@@ -210,8 +216,8 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
         else
           INITIAL_MSG="Update $DIR_NAME"
         fi
-      # テストファイルのみ（ファイルパスにtest/specを含む）
-      elif echo "$STAGED_STATUS" | awk '{print $NF}' | grep -qE "(test|spec)" && [ "$FILE_COUNT" -le 3 ]; then
+      # テストファイルのみ（test/specを厳密にマッチ）
+      elif echo "$STAGED_STATUS" | awk '{print $NF}' | grep -qE '(^|/)(test|spec|__tests__)/|[._-](test|spec)\.[a-z]+$' && [ "$FILE_COUNT" -le 3 ]; then
         INITIAL_MSG="Update tests"
       # ドキュメントのみ（.mdファイル）
       elif echo "$STAGED_STATUS" | awk '{print $NF}' | grep -qiE "\.md$" && [ "$FILE_COUNT" -le 3 ]; then
@@ -284,7 +290,7 @@ $(printf '%s\n' "$STAGED_DIFF" | head -20 | sed 's/^/# /')
 $CODE_CONTEXT
 #
 # 主要な変更内容 / Key changes:
-$(printf '%s\n' "$KEY_CHANGES" | head -10 | sed 's/^+/# + /')
+$(printf '%s\n' "$KEY_CHANGES" | head -10 | sed 's/^/# + /')
 EOF
 
     if [ -f "$TEMP_FILE" ] && [ -s "$TEMP_FILE" ]; then
