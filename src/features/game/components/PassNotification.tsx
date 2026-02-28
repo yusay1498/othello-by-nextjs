@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import type { Player } from "@/domain/game/types";
 
 interface PassNotificationProps {
@@ -18,12 +18,20 @@ export function PassNotification({
   duration,
   onComplete,
 }: PassNotificationProps) {
+  // onCompleteの最新参照を保持してタイマーリセットを防ぐ
+  const onCompleteRef = useRef(onComplete);
   useEffect(() => {
-    if (player && onComplete) {
-      const timer = setTimeout(onComplete, duration);
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
+
+  useEffect(() => {
+    if (player && onCompleteRef.current) {
+      const timer = setTimeout(() => {
+        onCompleteRef.current?.();
+      }, duration);
       return () => clearTimeout(timer);
     }
-  }, [player, duration, onComplete]);
+  }, [player, duration]);
 
   if (!player) {
     return null;
