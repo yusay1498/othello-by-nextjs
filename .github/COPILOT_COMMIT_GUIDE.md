@@ -63,7 +63,7 @@ git commit
 2. コミットメッセージ入力欄で、以下のいずれかを入力:
    - `#` を入力してCopilotに提案を依頼
    - `/commit` を入力（Copilot Chatが有効な場合）
-   - 変更の種類を示す最初の単語を入力（例: `feat`, `fix`, `docs`）
+   - 変更内容を示す単語を先頭大文字で入力（例: `Add`, `Fix`, `Update`）
 
 3. Copilotが提案を表示するので、Tab キーで受け入れる
 
@@ -73,12 +73,12 @@ git commit
 
 2. 以下のようなプロンプトを入力:
 ```
-現在のステージされた変更に対して、Conventional Commits形式でコミットメッセージを生成してください
+現在のステージされた変更に対して、先頭大文字の英語で簡潔なコミットメッセージを生成してください。プレフィックスは不要で、50文字以内、ピリオドやカンマは避けてください。
 ```
 
 または英語で:
 ```
-Generate a commit message in Conventional Commits format for the currently staged changes
+Generate a concise commit message for the currently staged changes starting with a capital letter in English, no prefix needed, under 50 characters, avoiding periods and commas
 ```
 
 3. 生成されたメッセージをコピーして使用
@@ -89,60 +89,37 @@ GitHub CLI (`gh`) がインストールされている場合:
 
 ```bash
 # 変更の差分を取得してCopilotに送信
-git diff --cached | gh copilot suggest "Generate a conventional commit message for these changes"
+git diff --cached | gh copilot suggest "Generate a concise commit message starting with capital letter, no prefix, under 50 characters"
 ```
 
 ## コミットメッセージのベストプラクティス
 
-このプロジェクトでは、Conventional Commits形式を使用します:
+このプロジェクトでは、以下の形式を使用します:
 
-```
-type(scope): description
+### 形式
 
-[optional body]
-
-[optional footer]
-```
-
-### 型 (Type)
-
-- `feat`: 新機能の追加
-- `fix`: バグ修正
-- `docs`: ドキュメントのみの変更
-- `style`: コードの意味に影響しない変更（フォーマット、セミコロンなど）
-- `refactor`: バグ修正や機能追加ではないコードの変更
-- `test`: テストの追加または修正
-- `chore`: ビルドプロセスや補助ツールの変更
-
-### スコープ (Scope)（オプション）
-
-- `game`: ゲームロジック関連
-- `board`: ボード表示関連
-- `ai`: AI関連
-- `ui`: UI/UX関連
-- `docs`: ドキュメント関連
+**1行目:**
+- 必ず先頭大文字の英語で記述
+- プレフィックス（feat:, fix: など）は不要
+- 変更内容を簡潔に記述
+- ピリオド、カンマ、接続詞はできるだけ避ける
+- 1文でかつ50文字以内に収める
 
 ### 例
 
 ```
-feat(game): オセロの盤面状態管理機能を実装
-
-- ボードの初期化機能を追加
-- 駒の配置と反転ロジックを実装
-- ゲーム終了判定を追加
+Add move validation logic
+Correct piece flip calculation
+Update installation instructions
+Implement board state management
+Fix visual feedback on piece placement
 ```
 
+**悪い例 / Bad examples:**
 ```
-fix(board): 駒配置時の視覚的フィードバックを修正
-
-ユーザーが駒を配置した際に、反転アニメーションが
-正しく動作していなかった問題を修正
-```
-
-```
-docs(readme): インストール手順を更新
-
-Node.js 24.x以降が必要であることを明記
+feat(game): Add move validation logic.  ❌ (プレフィックスとピリオドがある)
+add move validation logic  ❌ (先頭が小文字)
+Add move validation logic, and update tests  ❌ (カンマと接続詞がある)
 ```
 
 ## トラブルシューティング
@@ -174,8 +151,8 @@ git config core.hooksPath
 ## 参考リンク
 
 - [GitHub Copilot Documentation](https://docs.github.com/en/copilot)
-- [Conventional Commits](https://www.conventionalcommits.org/)
 - [Git Hooks Documentation](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)
+- [How to Write a Git Commit Message](https://chris.beams.io/posts/git-commit/)
 
 ---
 
@@ -229,7 +206,7 @@ git commit
 2. In the commit message input, do one of the following:
    - Type `#` to request Copilot suggestions
    - Type `/commit` (if Copilot Chat is enabled)
-   - Start typing the change type (e.g., `feat`, `fix`, `docs`)
+   - Start typing with a capital letter describing the change (e.g., `Add`, `Fix`, `Update`)
 
 3. Copilot will show suggestions - press Tab to accept
 
@@ -239,12 +216,7 @@ git commit
 
 2. Enter a prompt like:
 ```
-Generate a commit message in Conventional Commits format for the currently staged changes
-```
-
-Or in Japanese:
-```
-現在のステージされた変更に対して、Conventional Commits形式でコミットメッセージを生成してください
+Generate a concise commit message for the currently staged changes starting with a capital letter in English, no prefix needed, under 50 characters, avoiding periods and commas
 ```
 
 3. Copy the generated message and use it
@@ -255,60 +227,37 @@ If you have GitHub CLI (`gh`) installed:
 
 ```bash
 # Get the diff and send it to Copilot
-git diff --cached | gh copilot suggest "Generate a conventional commit message for these changes"
+git diff --cached | gh copilot suggest "Generate a concise commit message starting with capital letter, no prefix, under 50 characters"
 ```
 
 ## Commit Message Best Practices
 
-This project uses the Conventional Commits format:
+This project uses the following format:
 
-```
-type(scope): description
+### Format
 
-[optional body]
-
-[optional footer]
-```
-
-### Types
-
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation only changes
-- `style`: Changes that don't affect code meaning (formatting, semicolons, etc.)
-- `refactor`: Code change that neither fixes a bug nor adds a feature
-- `test`: Adding or updating tests
-- `chore`: Changes to build process or auxiliary tools
-
-### Scope (Optional)
-
-- `game`: Game logic related
-- `board`: Board display related
-- `ai`: AI related
-- `ui`: UI/UX related
-- `docs`: Documentation related
+**First line:**
+- Must start with a capital letter in English
+- No prefix (feat:, fix:, etc.) needed
+- Describe changes concisely
+- Avoid periods, commas, and conjunctions
+- Keep it to one sentence under 50 characters
 
 ### Examples
 
 ```
-feat(game): implement Othello board state management
-
-- Add board initialization
-- Implement piece placement and flipping logic
-- Add game end detection
+Add move validation logic
+Correct piece flip calculation
+Update installation instructions
+Implement board state management
+Fix visual feedback on piece placement
 ```
 
+**Bad examples:**
 ```
-fix(board): correct visual feedback on piece placement
-
-Fixed an issue where the flip animation did not work
-correctly when the user placed a piece
-```
-
-```
-docs(readme): update installation instructions
-
-Clarified that Node.js 24.x or later is required
+feat(game): Add move validation logic.  ❌ (has prefix and period)
+add move validation logic  ❌ (starts with lowercase)
+Add move validation logic, and update tests  ❌ (has comma and conjunction)
 ```
 
 ## Troubleshooting
@@ -340,5 +289,5 @@ git config core.hooksPath
 ## References
 
 - [GitHub Copilot Documentation](https://docs.github.com/en/copilot)
-- [Conventional Commits](https://www.conventionalcommits.org/)
 - [Git Hooks Documentation](https://git-scm.com/book/en/v2/Customizing-Git-Git-Hooks)
+- [How to Write a Git Commit Message](https://chris.beams.io/posts/git-commit/)

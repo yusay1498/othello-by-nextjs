@@ -25,16 +25,18 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
     cat >> "$COMMIT_MSG_FILE" << EOF
 
 # コミットメッセージのガイドライン:
-# - Conventional Commits形式を使用: type(scope): description
-# - 型: feat, fix, docs, style, refactor, test, chore
-# - 変更内容を簡潔かつ明確に記述
-# - 日本語または英語で記述可能
+# - 1行目: 必ず先頭大文字の英語で記述
+# - プレフィックス（feat:, fix: など）は不要
+# - 変更内容を簡潔に記述
+# - ピリオド、カンマ、接続詞はできるだけ避ける
+# - 1文でかつ50文字以内に収める
 #
 # Commit message guidelines:
-# - Use Conventional Commits format: type(scope): description
-# - Types: feat, fix, docs, style, refactor, test, chore
-# - Describe changes clearly and concisely
-# - Can be written in Japanese or English
+# - First line: Must start with capital letter in English
+# - No prefix (feat:, fix:, etc.) needed
+# - Describe changes concisely
+# - Avoid periods, commas, and conjunctions
+# - Keep it to one sentence under 50 characters
 #
 # ステージされた変更 / Staged changes:
 # $(echo "$STAGED_DIFF" | head -20)
