@@ -1,5 +1,19 @@
 # GitHub Copilot Instructions for Othello by Next.js
 
+## Language Preference / 言語設定
+
+**When providing code reviews, please respond in Japanese (日本語).** This includes:
+- Pull request review comments
+- Code suggestions and improvements
+- Explanations of issues or bugs
+- Best practice recommendations
+
+コードレビューを行う際は、日本語で応答してください。これには以下が含まれます：
+- プルリクエストのレビューコメント
+- コード改善の提案
+- 問題やバグの説明
+- ベストプラクティスの推奨事項
+
 ## Project Overview
 This is an Othello (Reversi) game implementation using Next.js 16, React 19, TypeScript, and Tailwind CSS.
 
