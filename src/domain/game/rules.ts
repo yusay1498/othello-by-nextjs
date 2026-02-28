@@ -9,14 +9,12 @@ import type { Board, Direction, GameState, Player, Position } from './types';
  * @returns 有効な移動の場合true
  */
 function isValidMove(from: Position, direction: Direction): boolean {
-  const row = Math.floor(from / BOARD_SIZE);
   const col = from % BOARD_SIZE;
   const next = from + direction;
 
   // 範囲外チェック
   if (next < 0 || next >= TOTAL_CELLS) return false;
 
-  const nextRow = Math.floor(next / BOARD_SIZE);
   const nextCol = next % BOARD_SIZE;
 
   // 横方向の境界チェック
