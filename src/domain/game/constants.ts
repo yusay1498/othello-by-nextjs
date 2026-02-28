@@ -1,45 +1,45 @@
 /**
- * Constants for the Othello game domain
+ * オセロゲームドメインの定数
  */
 
 /**
- * Board size (8x8)
+ * ボードサイズ（8x8）
  */
 export const BOARD_SIZE = 8;
 
 /**
- * Total number of cells on the board
+ * ボード上の総マス数
  */
 export const TOTAL_CELLS = 64;
 
 /**
- * Direction vectors for the 8 directions
- * - -9: Top-left diagonal
- * - -8: Up
- * - -7: Top-right diagonal
- * - -1: Left
- * -  1: Right
- * -  7: Bottom-left diagonal
- * -  8: Down
- * -  9: Bottom-right diagonal
+ * 8方向の移動ベクトル
+ * - -9: 左上斜め
+ * - -8: 上
+ * - -7: 右上斜め
+ * - -1: 左
+ * -  1: 右
+ * -  7: 左下斜め
+ * -  8: 下
+ * -  9: 右下斜め
  */
 export const DIRECTIONS: readonly number[] = [
   -9, -8, -7, -1, 1, 7, 8, 9,
 ] as const;
 
 /**
- * Corner positions on the board
- * Corners are strategically important in Othello
+ * ボード上の角の位置
+ * オセロでは角が戦略的に重要
  */
 export const CORNERS: readonly number[] = [0, 7, 56, 63] as const;
 
 /**
- * Position weights for AI evaluation
- * Higher values indicate more desirable positions
- * - Corners (100): Most valuable
- * - Adjacent to corners (-20 to -50): Dangerous (opponent can capture corner)
- * - Edges (10): Moderately valuable
- * - Center (0-1): Neutral to slightly valuable
+ * AI評価用の位置の重み
+ * 値が大きいほど望ましい位置
+ * - 角 (100): 最も価値が高い
+ * - 角に隣接 (-20 ~ -50): 危険（相手に角を取られる可能性）
+ * - 辺 (10): 適度に価値が高い
+ * - 中央 (0-1): 中立からやや価値がある
  */
 export const POSITION_WEIGHTS: readonly number[] = [
   100, -20, 10, 5, 5, 10, -20, 100, -20, -50, -2, -2, -2, -2, -50, -20, 10, -2,
