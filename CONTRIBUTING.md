@@ -74,16 +74,17 @@ These constraints are automatically loaded by AI coding assistants that support 
 Follow this commit message format:
 
 **Format:**
-- Write in Japanese (日本語)
-- Use conventional commit format: `type(scope): メッセージ`
-- Types: feat（機能追加）, fix（バグ修正）, docs（ドキュメント）, style（スタイル）, refactor（リファクタリング）, test（テスト）, chore（雑務）
-- Keep messages clear and concise
+- Write in English with the first letter capitalized
+- Do NOT use prefixes like feat:, fix:, docs:, etc.
+- Describe the change concisely in one sentence
+- Avoid periods, commas, and conjunctions
+- Keep the message under 50 characters
 
 Examples:
 ```
-feat(game): オセロボードの初期配置を実装
-fix(ui): モバイル表示時のレイアウト崩れを修正
-refactor(logic): 駒の裏返し処理を最適化
+Add initial board layout for Othello
+Fix mobile layout issue
+Update ESLint configuration
 ```
 
 #### Using GitHub Copilot for Commit Messages
