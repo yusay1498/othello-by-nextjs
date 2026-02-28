@@ -26,18 +26,63 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
     # 初期メッセージを生成
     INITIAL_MSG=""
     
+    # 追加された行から主要な変更を抽出
+    ADDED_LINES=$(git diff --cached --no-color | grep "^+" | grep -v "^+++" | head -30)
+    
     if [ "$FILE_COUNT" -eq 1 ]; then
-      # 1ファイルの場合、詳細なメッセージを生成
       STATUS=$(echo "$STAGED_STATUS" | awk '{print $1}')
       FILE_PATH=$(echo "$STAGED_STATUS" | awk '{print $NF}')
       FILE_NAME=$(basename "$FILE_PATH")
+      DIR_NAME=$(dirname "$FILE_PATH")
       
       case "$STATUS" in
         A)
-          INITIAL_MSG="Add $FILE_NAME"
+          # 新規ファイル: ファイルの目的を推測
+          if echo "$FILE_PATH" | grep -q "test\|spec"; then
+            INITIAL_MSG="Add tests for ${FILE_NAME%.*}"
+          elif echo "$FILE_PATH" | grep -q "components"; then
+            INITIAL_MSG="Add ${FILE_NAME%.*} component"
+          elif echo "$FILE_PATH" | grep -q "hooks"; then
+            INITIAL_MSG="Add ${FILE_NAME} hook"
+          elif echo "$FILE_NAME" | grep -q "README"; then
+            INITIAL_MSG="Add documentation"
+          else
+            INITIAL_MSG="Add $FILE_NAME"
+          fi
           ;;
         M)
-          INITIAL_MSG="Update $FILE_NAME"
+          # 修正: 変更内容から推測
+          # 関数の追加を検出
+          NEW_FUNC=$(echo "$ADDED_LINES" | grep -E "^\\+\\s*(function |const .* = |def |class )" | head -1 | sed 's/^+//' | xargs)
+          
+          if [ -n "$NEW_FUNC" ]; then
+            # 関数名/クラス名を抽出
+            FUNC_NAME=$(echo "$NEW_FUNC" | sed -E 's/.*(function |const |def |class )([a-zA-Z_][a-zA-Z0-9_]*).*/\2/')
+            INITIAL_MSG="Add $FUNC_NAME to $FILE_NAME"
+          # 変数/設定の追加を検出  
+          elif echo "$ADDED_LINES" | grep -qE "^\\+\\s*(INITIAL_MSG|MSG|MESSAGE)"; then
+            INITIAL_MSG="Add message generation to $FILE_NAME"
+          # case文の追加を検出
+          elif echo "$ADDED_LINES" | grep -qE "^\\+\\s*case "; then
+            INITIAL_MSG="Add case handling to $FILE_NAME"
+          # if文の追加を検出
+          elif echo "$ADDED_LINES" | grep -qE "^\\+\\s*(if |elif |else)"; then
+            INITIAL_MSG="Add conditional logic to $FILE_NAME"
+          # コメントの追加を検出
+          elif echo "$ADDED_LINES" | grep -qE "^\\+\\s*(#|//|/\\*).*[a-zA-Z]"; then
+            INITIAL_MSG="Add comments to $FILE_NAME"
+          # importの追加を検出
+          elif echo "$ADDED_LINES" | grep -qE "^\\+\\s*(import |from .* import |require)"; then
+            INITIAL_MSG="Add imports to $FILE_NAME"
+          else
+            # デフォルト: ディレクトリ構造を含める
+            if [ "$DIR_NAME" != "." ]; then
+              SHORT_DIR=$(echo "$DIR_NAME" | sed 's|.*/||')
+              INITIAL_MSG="Update $SHORT_DIR/$FILE_NAME"
+            else
+              INITIAL_MSG="Update $FILE_NAME"
+            fi
+          fi
           ;;
         D)
           INITIAL_MSG="Remove $FILE_NAME"
@@ -49,8 +94,22 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
           ;;
       esac
     else
-      # 複数ファイルの場合
-      INITIAL_MSG="Update $FILE_COUNT files"
+      # 複数ファイルの場合: 共通のパターンを探す
+      COMMON_DIR=$(echo "$STAGED_STATUS" | awk '{print $NF}' | xargs -I{} dirname {} | sort -u | head -1)
+      
+      # 全て同じディレクトリの場合
+      if [ "$(echo "$STAGED_STATUS" | awk '{print $NF}' | xargs -I{} dirname {} | sort -u | wc -l)" -eq 1 ]; then
+        DIR_NAME=$(basename "$COMMON_DIR")
+        INITIAL_MSG="Update $DIR_NAME configuration"
+      # テストファイルが含まれる場合
+      elif echo "$STAGED_STATUS" | grep -qE "test|spec"; then
+        INITIAL_MSG="Update tests"
+      # ドキュメントが含まれる場合
+      elif echo "$STAGED_STATUS" | grep -qiE "readme|doc|\.md"; then
+        INITIAL_MSG="Update documentation"
+      else
+        INITIAL_MSG="Update $FILE_COUNT files"
+      fi
     fi
 
     # Write initial message and helpful context
