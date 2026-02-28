@@ -245,5 +245,97 @@ describe("GameResult", () => {
       const title = screen.getByText("黒の勝ち！");
       expect(title).toHaveAttribute("id", "game-result-title");
     });
+
+    it("モーダルが表示されたら「もう一度」ボタンにフォーカスが移動する", () => {
+      const result: WinnerResult = {
+        type: "win",
+        winner: "black",
+        perfect: false,
+      };
+      render(
+        <GameResult
+          result={result}
+          score={{ black: 35, white: 29 }}
+          onRestart={vi.fn()}
+          onBackToMenu={vi.fn()}
+        />
+      );
+
+      const restartButton = screen.getByRole("button", {
+        name: "もう一度プレイする",
+      });
+      expect(restartButton).toHaveFocus();
+    });
+
+    it("ESCキーを押すとonBackToMenuが呼ばれる", async () => {
+      const user = userEvent.setup();
+      const onBackToMenu = vi.fn();
+      const result: WinnerResult = {
+        type: "win",
+        winner: "black",
+        perfect: false,
+      };
+
+      render(
+        <GameResult
+          result={result}
+          score={{ black: 35, white: 29 }}
+          onRestart={vi.fn()}
+          onBackToMenu={onBackToMenu}
+        />
+      );
+
+      await user.keyboard("{Escape}");
+
+      expect(onBackToMenu).toHaveBeenCalledTimes(1);
+    });
+
+    it("バックドロップをクリックするとonBackToMenuが呼ばれる", async () => {
+      const user = userEvent.setup();
+      const onBackToMenu = vi.fn();
+      const result: WinnerResult = {
+        type: "win",
+        winner: "black",
+        perfect: false,
+      };
+
+      render(
+        <GameResult
+          result={result}
+          score={{ black: 35, white: 29 }}
+          onRestart={vi.fn()}
+          onBackToMenu={onBackToMenu}
+        />
+      );
+
+      const backdrop = screen.getByRole("dialog");
+      await user.click(backdrop);
+
+      expect(onBackToMenu).toHaveBeenCalledTimes(1);
+    });
+
+    it("モーダルコンテンツをクリックしてもonBackToMenuは呼ばれない", async () => {
+      const user = userEvent.setup();
+      const onBackToMenu = vi.fn();
+      const result: WinnerResult = {
+        type: "win",
+        winner: "black",
+        perfect: false,
+      };
+
+      render(
+        <GameResult
+          result={result}
+          score={{ black: 35, white: 29 }}
+          onRestart={vi.fn()}
+          onBackToMenu={onBackToMenu}
+        />
+      );
+
+      const title = screen.getByText("黒の勝ち！");
+      await user.click(title);
+
+      expect(onBackToMenu).not.toHaveBeenCalled();
+    });
   });
 });

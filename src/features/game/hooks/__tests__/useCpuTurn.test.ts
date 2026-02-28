@@ -1,7 +1,7 @@
 import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { useCpuTurn } from "../useCpuTurn";
-import type { GameState, GameConfig, Position } from "@/domain/game/types";
+import type { GameState, GameConfig } from "@/domain/game/types";
 import { createInitialBoard } from "@/domain/game/board";
 import * as ai from "@/domain/game/ai";
 
@@ -356,7 +356,7 @@ describe("useCpuTurn", () => {
       let isCpuThinking = false;
 
       // useGameのhandleMoveを模擬（isCpuThinkingチェックなし）
-      const handleMove = vi.fn((index: Position) => {
+      const handleMove = vi.fn(() => {
         // handleMoveが呼ばれた時点でisCpuThinkingの状態を記録
         // 修正前: isCpuThinkingがtrueだとブロックされた
         // 修正後: isCpuThinkingに関係なく実行される

@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import type { WinnerResult } from "@/domain/game/types";
 
 interface GameResultProps {
@@ -14,6 +15,7 @@ interface GameResultProps {
  *
  * ゲームが終了した際に勝敗結果とスコアを表示し、
  * 再戦またはメニューに戻るオプションを提供します。
+ * アクセシビリティ: 初期フォーカス移動、ESCキー、バックドロップクリックで閉じる機能を実装
  */
 export function GameResult({
   result,
@@ -21,6 +23,29 @@ export function GameResult({
   onRestart,
   onBackToMenu,
 }: GameResultProps) {
+  const restartButtonRef = useRef<HTMLButtonElement>(null);
+
+  // モーダルが表示されたら最初のボタンにフォーカスを移動
+  useEffect(() => {
+    if (result.type !== "playing" && restartButtonRef.current) {
+      restartButtonRef.current.focus();
+    }
+  }, [result.type]);
+
+  // ESCキーでモーダルを閉じる（メニューに戻る）
+  useEffect(() => {
+    if (result.type === "playing") return;
+
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onBackToMenu();
+      }
+    };
+
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, [result.type, onBackToMenu]);
+
   // ゲーム進行中の場合は何も表示しない
   if (result.type === "playing") return null;
 
@@ -45,8 +70,12 @@ export function GameResult({
       role="dialog"
       aria-modal="true"
       aria-labelledby="game-result-title"
+      onClick={onBackToMenu}
     >
-      <div className="bg-white dark:bg-zinc-800 rounded-lg shadow-xl p-8 max-w-md w-full mx-4">
+      <div
+        className="bg-white dark:bg-zinc-800 rounded-lg shadow-xl p-8 max-w-md w-full mx-4"
+        onClick={(e) => e.stopPropagation()}
+      >
         <h2
           id="game-result-title"
           className="text-2xl font-bold text-center mb-6 text-zinc-900 dark:text-zinc-50"
@@ -81,15 +110,16 @@ export function GameResult({
 
         <div className="flex flex-col sm:flex-row gap-4">
           <button
+            ref={restartButtonRef}
             onClick={onRestart}
-            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+            className="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
             aria-label="もう一度プレイする"
           >
             もう一度
           </button>
           <button
             onClick={onBackToMenu}
-            className="flex-1 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-700 dark:hover:bg-zinc-600 text-zinc-900 dark:text-zinc-50 font-semibold py-3 px-6 rounded-lg transition-colors"
+            className="flex-1 bg-zinc-200 hover:bg-zinc-300 dark:bg-zinc-700 dark:hover:bg-zinc-600 text-zinc-900 dark:text-zinc-50 font-semibold py-3 px-6 rounded-lg transition-colors focus:outline-none focus:ring-2 focus:ring-zinc-500 focus:ring-offset-2"
             aria-label="メニューに戻る"
           >
             メニューに戻る
