@@ -92,7 +92,7 @@ describe("useGame", () => {
       expect(result.current.state).toBe(prevState);
     });
 
-    test("操作がブロックされている場合は手を打てない", () => {
+    test("isCpuThinkingフラグは手の実行をブロックしない（UI側でブロック）", () => {
       const config: GameConfig = {
         mode: "pvp",
         userColor: "black",
@@ -100,21 +100,22 @@ describe("useGame", () => {
 
       const { result } = renderHook(() => useGame(config));
 
-      // CPU思考中フラグを使って操作をブロックする
+      // CPU思考中フラグを立てる
       act(() => {
         result.current.setIsCpuThinking(true);
       });
 
       const prevState = result.current.state;
 
-      // 手を打とうとする
+      // 手を打つ
       act(() => {
         result.current.handleMove(19);
       });
 
-      // ブロックされているので状態が変わらない
-      expect(result.current.state).toBe(prevState);
-      expect(result.current.isCpuThinking).toBe(true);
+      // handleMoveはisCpuThinkingをチェックしないので、手が実行される
+      // （実際のブロックはBoard componentのdisabled propで行われる）
+      expect(result.current.state).not.toBe(prevState);
+      expect(result.current.state.currentPlayer).toBe("white");
     });
 
     test("通常の手ではパスは発生しない", () => {

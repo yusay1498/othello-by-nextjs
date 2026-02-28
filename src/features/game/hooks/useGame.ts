@@ -47,8 +47,8 @@ export function useGame(config: GameConfig | null) {
   // 手を打つ
   const handleMove = useCallback(
     (index: Position) => {
-      // ゲーム終了またはCPU思考中は操作不可
-      if (gameOver || isCpuThinking) return;
+      // ゲーム終了時は操作不可
+      if (gameOver) return;
 
       const prevState = state;
       const newState = applyMove(state, index);
@@ -69,7 +69,7 @@ export function useGame(config: GameConfig | null) {
         passTimerRef.current = setTimeout(() => setPassPlayer(null), 1000);
       }
     },
-    [state, gameOver, isCpuThinking]
+    [state, gameOver]
   );
 
   // パスを実行
