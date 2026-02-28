@@ -55,6 +55,10 @@ This is an Othello (Reversi) game implementation using Next.js 16, React 19, Typ
 - Use conventional commits format: `type(scope): message`
 - Types: feat, fix, docs, style, refactor, test, chore
 - Keep messages clear and concise
+- Can be written in Japanese or English
+- When generating commit messages, analyze the staged changes and provide context-aware suggestions
+- Include the scope when it's clear which part of the system is affected (game, board, ai, ui, docs)
+- For Japanese commits, use polite form (ですます調) in the body if present
 
 ## Best Practices
 - Keep functions small and focused

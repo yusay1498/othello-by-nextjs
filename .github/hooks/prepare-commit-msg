@@ -1,0 +1,46 @@
+#!/bin/sh
+#
+# Git hook to help generate commit messages with GitHub Copilot
+# This hook provides context for Copilot to suggest better commit messages
+#
+# To install this hook:
+#   cp .github/hooks/prepare-commit-msg .git/hooks/prepare-commit-msg
+#   chmod +x .git/hooks/prepare-commit-msg
+#
+# Or configure git to use this hooks directory:
+#   git config core.hooksPath .github/hooks
+
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+SHA1=$3
+
+# Only run for regular commits (not merge, squash, etc.)
+if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
+  # Get the diff of staged changes
+  STAGED_DIFF=$(git diff --cached --stat)
+
+  # If there are staged changes and the commit message is empty or default
+  if [ -n "$STAGED_DIFF" ] && ([ ! -s "$COMMIT_MSG_FILE" ] || grep -q "^#" "$COMMIT_MSG_FILE"); then
+    # Add helpful context as comments that Copilot can read
+    cat >> "$COMMIT_MSG_FILE" << EOF
+
+# コミットメッセージのガイドライン:
+# - Conventional Commits形式を使用: type(scope): description
+# - 型: feat, fix, docs, style, refactor, test, chore
+# - 変更内容を簡潔かつ明確に記述
+# - 日本語または英語で記述可能
+#
+# Commit message guidelines:
+# - Use Conventional Commits format: type(scope): description
+# - Types: feat, fix, docs, style, refactor, test, chore
+# - Describe changes clearly and concisely
+# - Can be written in Japanese or English
+#
+# ステージされた変更 / Staged changes:
+# $(echo "$STAGED_DIFF" | head -20)
+#
+# GitHub Copilotを使用して、上記の変更に基づいて適切なコミットメッセージを生成できます。
+# You can use GitHub Copilot to generate an appropriate commit message based on the changes above.
+EOF
+  fi
+fi

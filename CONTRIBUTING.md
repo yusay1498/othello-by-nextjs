@@ -83,6 +83,17 @@ fix(board): correct piece flip calculation
 docs(readme): update installation instructions
 ```
 
+#### Using GitHub Copilot for Commit Messages
+You can use GitHub Copilot to help generate commit messages. See [.github/COPILOT_COMMIT_GUIDE.md](.github/COPILOT_COMMIT_GUIDE.md) for detailed instructions.
+
+Quick setup:
+```bash
+# Enable git hooks that work with Copilot
+git config core.hooksPath .github/hooks
+```
+
+Then when you commit, Copilot will help suggest appropriate commit messages based on your staged changes.
+
 ### Submitting a Pull Request
 1. Push your branch to your fork:
    ```bash
