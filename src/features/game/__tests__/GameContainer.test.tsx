@@ -34,7 +34,6 @@ describe("GameContainer", () => {
       passPlayer: null,
       handleMove: vi.fn(),
       handlePass: vi.fn(),
-      handlePass: vi.fn(),
       handleRestart: vi.fn(),
       handleBackToMenu: vi.fn(),
     });
