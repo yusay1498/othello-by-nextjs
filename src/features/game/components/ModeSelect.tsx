@@ -16,6 +16,14 @@ export function ModeSelect({ onSelectMode }: ModeSelectProps) {
   const [mode, setMode] = useState<GameMode>("pvp");
   const [userColor, setUserColor] = useState<PlayerColor>("black");
 
+  const handleModeChange = (newMode: GameMode) => {
+    setMode(newMode);
+    // PvPモードに切り替える際は色を黒にリセット
+    if (newMode === "pvp") {
+      setUserColor("black");
+    }
+  };
+
   const handleStart = () => {
     onSelectMode({ mode, userColor });
   };
@@ -33,7 +41,9 @@ export function ModeSelect({ onSelectMode }: ModeSelectProps) {
           </h3>
           <div className="grid grid-cols-2 gap-3">
             <button
-              onClick={() => setMode("pvp")}
+              type="button"
+              onClick={() => handleModeChange("pvp")}
+              aria-pressed={mode === "pvp"}
               className={`rounded-lg border-2 px-6 py-4 font-semibold transition-all ${
                 mode === "pvp"
                   ? "border-green-600 bg-green-600 text-white shadow-md"
@@ -43,7 +53,9 @@ export function ModeSelect({ onSelectMode }: ModeSelectProps) {
               2人対戦
             </button>
             <button
-              onClick={() => setMode("pvc")}
+              type="button"
+              onClick={() => handleModeChange("pvc")}
+              aria-pressed={mode === "pvc"}
               className={`rounded-lg border-2 px-6 py-4 font-semibold transition-all ${
                 mode === "pvc"
                   ? "border-green-600 bg-green-600 text-white shadow-md"
@@ -92,6 +104,7 @@ export function ModeSelect({ onSelectMode }: ModeSelectProps) {
         )}
 
         <button
+          type="button"
           onClick={handleStart}
           className="w-full rounded-lg bg-green-600 px-6 py-4 text-lg font-bold text-white shadow-lg transition-all hover:bg-green-700 hover:shadow-xl active:scale-95"
         >
