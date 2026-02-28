@@ -4,7 +4,16 @@
 
 ## クイックスタート / Quick Start
 
-最速でセットアップするには、以下のコマンドを実行してください：
+### 推奨方法: VSCode ✨ボタンを使用
+
+1. VSCodeでSource Controlパネルを開く（`Ctrl/Cmd + Shift + G`）
+2. ファイルをステージングする
+3. コミットメッセージ入力欄の横にある **✨（Sparkle）ボタン** をクリック
+4. Copilotが自動的にコミットメッセージを生成します
+
+> **Note**: このプロジェクトでは `.vscode/settings.json` に `github.copilot.chat.commitMessageGeneration.instructions` を設定しているため、Copilotはプロジェクトのコミット規約（先頭大文字の英語、50文字以内、プレフィックスなし）に従ったメッセージを生成します。
+
+### 代替方法: Git Hookを使用
 
 ```bash
 # セットアップスクリプトを実行 / Run the setup script
@@ -13,29 +22,63 @@
 # 変更をステージング / Stage your changes
 git add <files>
 
-# コミット（Copilotが提案を行います）/ Commit (Copilot will suggest messages)
+# コミット（エディタが開きます）/ Commit (editor will open)
 git commit
 ```
 
 ## 前提条件
 
 - GitHub Copilot がインストールされていること
-- Visual Studio Code、IntelliJ IDEA、または他のCopilot対応エディタを使用していること
+- GitHub Copilot Chat がインストールされていること（✨ボタン機能に必要）
+- Visual Studio Code を使用していること
 - Git が設定されていること
 
-## 方法 1: Git Hookを使用する（推奨）
+## 方法 1: VSCode ✨ボタンを使用する（推奨）
+
+この方法が最も簡単で効果的です。
 
 ### セットアップ
 
-1. フックディレクトリを設定:
-```bash
-git config core.hooksPath .github/hooks
+このプロジェクトでは既にVSCodeの設定が完了しています。`.vscode/settings.json` に以下の設定が含まれています：
+
+```json
+{
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "file": ".github/copilot-commit-instructions.md"
+    }
+  ]
+}
 ```
 
-または、手動でフックをコピー:
+この設定により、Copilotは `.github/copilot-commit-instructions.md` の指示に従ってコミットメッセージを生成します。
+
+### 使用方法
+
+1. 変更を加えてファイルをステージング（Source Controlパネル or `git add`）
+2. Source Controlパネルでコミットメッセージ入力欄の横の **✨ボタン** をクリック
+3. Copilotがステージされた変更を分析し、規約に従ったコミットメッセージを生成
+4. 生成されたメッセージを確認・必要に応じて編集
+5. コミットを実行
+
+### カスタマイズ
+
+コミットメッセージの生成ルールを変更したい場合は、`.github/copilot-commit-instructions.md` を編集してください。
+
+## 方法 2: Git Hookを使用する
+
+Git Hookを使用すると、コミット時にエディタが自動的に開き、変更の概要がコメントとして表示されます。
+
+### セットアップ
+
 ```bash
-cp .github/hooks/prepare-commit-msg .git/hooks/prepare-commit-msg
-chmod +x .git/hooks/prepare-commit-msg
+# セットアップスクリプトを実行
+./.github/scripts/setup-copilot-commits.sh
+```
+
+または手動で設定:
+```bash
+git config core.hooksPath .github/hooks
 ```
 
 ### 使用方法
@@ -50,47 +93,19 @@ git add <files>
 git commit
 ```
 
-3. エディタが開き、Copilotが変更内容に基づいてコミットメッセージを提案します
+3. エディタが開き、変更の概要がコメントとして表示されます
+4. Copilotの補完機能を使ってメッセージを入力、または手動で記述
 
-4. Copilotの提案を確認し、必要に応じて編集してから保存
+## 方法 3: Copilot Chatを使用
 
-## 方法 2: エディタでCopilotを直接使用
-
-### Visual Studio Codeの場合
-
-1. Source Control パネルを開く（Ctrl/Cmd + Shift + G）
-
-2. コミットメッセージ入力欄で、以下のいずれかを入力:
-   - `#` を入力してCopilotに提案を依頼
-   - `/commit` を入力（Copilot Chatが有効な場合）
-   - 変更内容を示す単語を先頭大文字で入力（例: `Add`, `Fix`, `Update`）
-
-3. Copilotが提案を表示するので、Tab キーで受け入れる
-
-### Copilot Chatを使用
-
-1. Copilot Chatを開く（Ctrl/Cmd + Shift + I）
+1. Copilot Chatを開く（`Ctrl/Cmd + Shift + I`）
 
 2. 以下のようなプロンプトを入力:
 ```
-現在のステージされた変更に対して、日本語でtype(scope): メッセージの形式でコミットメッセージを生成してください。タイプはfeat, fix, docs, style, refactor, test, choreのいずれかを使用してください。
-```
-
-または英語で:
-```
-Generate a commit message for the currently staged changes in Japanese using the format: type(scope): メッセージ. Use types like feat, fix, docs, style, refactor, test, or chore.
+Generate a commit message for the staged changes. Use English with first letter capitalized, no prefix, under 50 characters.
 ```
 
 3. 生成されたメッセージをコピーして使用
-
-## 方法 3: コマンドラインでCopilotを使用
-
-GitHub CLI (`gh`) がインストールされている場合:
-
-```bash
-# 変更の差分を取得してCopilotに送信
-git diff --cached | gh copilot suggest "Generate a commit message in Japanese using format: type(scope): メッセージ"
-```
 
 ## コミットメッセージのベストプラクティス
 
@@ -98,27 +113,28 @@ git diff --cached | gh copilot suggest "Generate a commit message in Japanese us
 
 ### 形式
 
-**日本語での従来のコミット形式:**
-- 日本語で記述してください
-- `type(scope): メッセージ` の形式を使用
-- タイプ: feat（機能追加）, fix（バグ修正）, docs（ドキュメント）, style（スタイル）, refactor（リファクタリング）, test（テスト）, chore（雑務）
-- メッセージは明確で簡潔に保ってください
+- 先頭大文字の英語で記述
+- プレフィックス（feat:, fix: など）は不要
+- 変更内容を簡潔に記述
+- ピリオド、カンマ、接続詞はできるだけ避ける
+- 1文でかつ50文字以内に収める
 
 ### 例
 
 ```
-feat(game): オセロボードの初期配置を実装
-fix(ui): モバイル表示時のレイアウト崩れを修正
-refactor(logic): 駒の裏返し処理を最適化
-docs(readme): インストール手順を更新
-test(rules): 合法手判定のテストケースを追加
+Add initial board layout for Othello
+Fix mobile layout issue
+Update ESLint configuration
+Remove unused imports
+Refactor flip logic for better performance
 ```
 
 **悪い例 / Bad examples:**
 ```
-Add move validation logic  ❌ (英語で記述されている・プレフィックスがない)
-feat(game): Add move validation logic  ❌ (英語で記述されている)
-オセロボードの初期配置を実装  ❌ (type(scope)プレフィックスがない)
+feat(game): Add initial board layout  ❌ (プレフィックスがある)
+add initial board layout  ❌ (先頭が小文字)
+Added initial board layout.  ❌ (過去形、ピリオドがある)
+Add board, fix styles, update config  ❌ (複数の変更、カンマがある)
 ```
 
 ## トラブルシューティング
@@ -162,72 +178,82 @@ This guide explains how to use GitHub Copilot to generate commit messages for lo
 ## Prerequisites
 
 - GitHub Copilot installed
-- Using Visual Studio Code, IntelliJ IDEA, or another Copilot-enabled editor
+- Using Visual Studio Code
 - Git configured
 
-## Method 1: Using Git Hook (Recommended)
+## Method 1: VSCode ✨ Button (Recommended)
+
+This is the easiest and most effective method.
 
 ### Setup
 
-1. Configure the hooks directory:
+This project already has VSCode settings configured. The `.vscode/settings.json` includes:
+
+```json
+{
+  "github.copilot.chat.commitMessageGeneration.instructions": [
+    {
+      "file": ".github/copilot-commit-instructions.md"
+    }
+  ]
+}
+```
+
+This setting tells Copilot to follow the instructions in `.github/copilot-commit-instructions.md` when generating commit messages.
+
+### Usage
+
+1. Stage your changes (Source Control panel or `git add`)
+2. Click the **✨ button** next to the commit message input in Source Control panel
+3. Copilot analyzes staged changes and generates a commit message following the project conventions
+4. Review and edit the generated message if needed
+5. Commit
+
+### Customization
+
+To change the commit message generation rules, edit `.github/copilot-commit-instructions.md`.
+
+## Method 2: Using Git Hook
+
+Git Hook opens your editor automatically when committing, showing a summary of changes as comments.
+
+### Setup
+
+```bash
+# Run the setup script
+./.github/scripts/setup-copilot-commits.sh
+```
+
+Or manually:
 ```bash
 git config core.hooksPath .github/hooks
 ```
 
-Or manually copy the hook:
-```bash
-cp .github/hooks/prepare-commit-msg .git/hooks/prepare-commit-msg
-chmod +x .git/hooks/prepare-commit-msg
-```
-
 ### Usage
 
-1. Make changes and stage files as usual:
+1. Make changes and stage files:
 ```bash
 git add <files>
 ```
 
-2. Run commit command without a message:
+2. Run commit without a message:
 ```bash
 git commit
 ```
 
-3. Your editor will open, and Copilot will suggest a commit message based on the changes
+3. Your editor opens with a summary of changes as comments
+4. Use Copilot's completion feature to write the message, or write manually
 
-4. Review Copilot's suggestion, edit if needed, and save
+## Method 3: Using Copilot Chat
 
-## Method 2: Using Copilot Directly in Your Editor
-
-### For Visual Studio Code
-
-1. Open the Source Control panel (Ctrl/Cmd + Shift + G)
-
-2. In the commit message input, do one of the following:
-   - Type `#` to request Copilot suggestions
-   - Type `/commit` (if Copilot Chat is enabled)
-   - Start typing with a capital letter describing the change (e.g., `Add`, `Fix`, `Update`)
-
-3. Copilot will show suggestions - press Tab to accept
-
-### Using Copilot Chat
-
-1. Open Copilot Chat (Ctrl/Cmd + Shift + I)
+1. Open Copilot Chat (`Ctrl/Cmd + Shift + I`)
 
 2. Enter a prompt like:
 ```
-Generate a commit message for the currently staged changes in Japanese using the format: type(scope): メッセージ. Use types like feat, fix, docs, style, refactor, test, or chore.
+Generate a commit message for the staged changes. Use English with first letter capitalized, no prefix, under 50 characters.
 ```
 
-3. Copy the generated message and use it
-
-## Method 3: Using Copilot from Command Line
-
-If you have GitHub CLI (`gh`) installed:
-
-```bash
-# Get the diff and send it to Copilot
-git diff --cached | gh copilot suggest "Generate a commit message in Japanese using format: type(scope): メッセージ"
-```
+3. Copy and use the generated message
 
 ## Commit Message Best Practices
 
@@ -235,27 +261,28 @@ This project uses the following format:
 
 ### Format
 
-**Japanese Conventional Commit Format:**
-- Write in Japanese (日本語)
-- Use format: `type(scope): メッセージ`
-- Types: feat（機能追加）, fix（バグ修正）, docs（ドキュメント）, style（スタイル）, refactor（リファクタリング）, test（テスト）, chore（雑務）
-- Keep messages clear and concise
+- Write in English with first letter capitalized
+- Do NOT use prefixes like feat:, fix:, docs:, etc.
+- Describe the change concisely
+- Avoid periods, commas, and conjunctions
+- Keep under 50 characters in one sentence
 
 ### Examples
 
 ```
-feat(game): オセロボードの初期配置を実装
-fix(ui): モバイル表示時のレイアウト崩れを修正
-refactor(logic): 駒の裏返し処理を最適化
-docs(readme): インストール手順を更新
-test(rules): 合法手判定のテストケースを追加
+Add initial board layout for Othello
+Fix mobile layout issue
+Update ESLint configuration
+Remove unused imports
+Refactor flip logic for better performance
 ```
 
 **Bad examples:**
 ```
-Add move validation logic  ❌ (written in English, no prefix)
-feat(game): Add move validation logic  ❌ (written in English)
-オセロボードの初期配置を実装  ❌ (no type(scope) prefix)
+feat(game): Add initial board layout  ❌ (has prefix)
+add initial board layout  ❌ (lowercase first letter)
+Added initial board layout.  ❌ (past tense, has period)
+Add board, fix styles, update config  ❌ (too long, has commas)
 ```
 
 ## Troubleshooting
