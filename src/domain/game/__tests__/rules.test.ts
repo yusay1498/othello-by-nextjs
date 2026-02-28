@@ -106,29 +106,44 @@ describe("applyMove", () => {
   });
 
   test("パスの自動処理：相手がパスする場合", () => {
-    // 実際のゲーム進行でパスが発生する可能性のある状況をシミュレート
-    // 単純に: 手番が戻るロジックが正しく動作するかを確認
+    // 確実にパスが発生する盤面を作成
+    // 黒が打った後、白が合法手を持たない状況
     const board: Board = new Array(64).fill(null);
-    // 黒が優勢で、白が孤立している配置
-    board[27] = "white"; // d4
-    board[28] = "black"; // e4
-    board[35] = "black"; // d5
-    board[36] = "black"; // e5
-    board[19] = null; // c4 (黒が置ける)
 
-    const state: GameState = { board, currentPlayer: "black" };
+    // 上部に黒と白を配置
+    board[0] = 'black';
+    board[1] = 'white';
+    board[2] = 'white';
+    board[3] = null;
 
-    // 黒の合法手を確認
-    const blackMoves = getLegalMoves(state);
+    // 下部は全て黒で埋める（白が置けない状況を作る）
+    for (let i = 8; i < 64; i++) {
+      board[i] = 'black';
+    }
 
-    // 黒が打てる手があることを確認
+    const state: GameState = { board, currentPlayer: 'black' };
+
+    // 黒が3に置く（2の白を裏返す）
+    const newState = applyMove(state, 3);
+
+    // 手が正常に適用されたことを確認
+    expect(newState.board[3]).toBe('black');
+    expect(newState.board[2]).toBe('black'); // 裏返った
+
+    // この後白は置く場所がない
+    // 白の合法手を確認
+    const whiteMoves = getLegalMoves({ board: newState.board, currentPlayer: 'white' });
+    expect(whiteMoves.length).toBe(0);
+
+    // 黒はまだ置ける（例：4番に置ける可能性がある）
+    const blackMoves = getLegalMoves({ board: newState.board, currentPlayer: 'black' });
+
+    // 黒が置けるなら手番が黒に戻る、置けないならゲーム終了
     if (blackMoves.length > 0) {
-      const newState = applyMove(state, blackMoves[0]);
-
-      // applyMoveの結果、手番が適切に設定されていることを確認
-      // (白が置けない場合は黒に戻る、置ける場合は白になる)
-      expect(newState.currentPlayer).toBeDefined();
-      expect(["black", "white"]).toContain(newState.currentPlayer);
+      expect(newState.currentPlayer).toBe('black');
+    } else {
+      // 両者とも置けない場合は白のままでゲーム終了
+      expect(newState.currentPlayer).toBe('white');
     }
   });
 
@@ -219,16 +234,15 @@ describe("境界値テスト", () => {
 
   test("角のマスでの合法手判定", () => {
     const board: Board = new Array(64).fill(null);
-    // 角に黒石、隣に白石
+    // 角に黒石、隣に白石を配置して黒が挟める状況を作る
     board[0] = "black";
     board[1] = "white";
-    board[8] = "white";
-    board[9] = "white";
+    board[2] = null; // ここに黒が置ける
 
     const state: GameState = { board, currentPlayer: "black" };
     const moves = getLegalMoves(state);
 
-    // 適切な合法手が見つかるはず
-    expect(moves.length).toBeGreaterThanOrEqual(0);
+    // 黒は2に置くことで1の白石を挟める
+    expect(moves).toContain(2);
   });
 });

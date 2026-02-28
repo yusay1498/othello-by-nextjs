@@ -1,6 +1,6 @@
-import { BOARD_SIZE, DIRECTIONS, TOTAL_CELLS } from "./constants";
-import { getOpponent } from "./board";
-import type { Board, Direction, GameState, Player, Position } from "./types";
+import { BOARD_SIZE, DIRECTIONS, TOTAL_CELLS } from './constants';
+import { getOpponent } from './board';
+import type { Board, Direction, GameState, Player, Position } from './types';
 
 /**
  * 指定方向への移動が盤面内に収まるか判定する

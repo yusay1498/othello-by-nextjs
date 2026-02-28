@@ -1,5 +1,6 @@
-import { getScore } from "./board";
-import type { Board, Player, WinnerResult } from "./types";
+import { TOTAL_CELLS } from './constants';
+import { getScore } from './board';
+import type { Board, Player, WinnerResult } from './types';
 
 /**
  * ゲームの勝敗結果を返す
@@ -13,7 +14,7 @@ export function getGameResult(
 ): WinnerResult {
   // ゲームが終了していない
   if (!gameOver) {
-    return { type: "playing" };
+    return { type: 'playing' };
   }
 
   // スコアを計算
@@ -21,17 +22,17 @@ export function getGameResult(
 
   // 引き分け
   if (score.black === score.white) {
-    return { type: "draw" };
+    return { type: 'draw' };
   }
 
   // 勝者を決定
-  const winner: Player = score.black > score.white ? "black" : "white";
+  const winner: Player = score.black > score.white ? 'black' : 'white';
 
   // パーフェクト勝利の判定
-  const perfect = score.black === 64 || score.white === 64;
+  const perfect = score.black === TOTAL_CELLS || score.white === TOTAL_CELLS;
 
   return {
-    type: "win",
+    type: 'win',
     winner,
     perfect,
   };
