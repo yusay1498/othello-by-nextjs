@@ -64,6 +64,24 @@ pnpm dev
 - `npm run start` - Start the production server
 - `npm run lint` - Run ESLint to check code quality
 
+## 📚 Documentation
+
+Comprehensive documentation is available in Japanese:
+
+- **[設計書 (Design Document)](DESIGN.md)** - Complete specification and design decisions
+- **[ドメイン層 (Domain Layer)](docs/domain/README.md)** - Business logic and game rules
+  - [型定義 (Types)](docs/domain/types.md)
+  - [定数 (Constants)](docs/domain/constants.md)
+  - [盤面操作 (Board)](docs/domain/board.md)
+  - [ルール (Rules)](docs/domain/rules.md)
+  - [AI](docs/domain/ai.md)
+  - [勝敗判定 (Winner)](docs/domain/winner.md)
+- **[コンポーネント (Components)](docs/components/README.md)** - UI component design
+- **[Hooks](docs/hooks/README.md)** - Custom hooks for state management
+- **[アーキテクチャ (Architecture)](docs/architecture/README.md)** - System architecture
+- **[テスト戦略 (Testing)](docs/testing/README.md)** - Testing strategy and examples
+- **[API リファレンス (API Reference)](docs/api/README.md)** - Complete API documentation
+
 ## 🤝 Contributing
 
 Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
