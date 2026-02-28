@@ -13,12 +13,11 @@ interface BoardProps {
  * 8x8のグリッドでCellコンポーネントを配置する
  */
 export function Board({ board, legalMoves, onCellClick, disabled }: BoardProps) {
-  return (
-    <div
-      className="grid grid-cols-8 gap-0 w-full max-w-xl aspect-square bg-green-800 border-4 border-green-900 rounded-lg overflow-hidden shadow-xl"
-      role="grid"
-      aria-label="オセロボード"
-    >
+    return (
+      <div
+        className="grid grid-cols-8 gap-0 w-full max-w-xl aspect-square bg-green-800 border-4 border-green-900 rounded-lg overflow-hidden shadow-xl"
+        aria-label="オセロボード"
+      >
       {board.map((cell, index) => (
         <Cell
           key={index}

@@ -70,7 +70,6 @@ describe("Cell", () => {
   });
 
   it("合法手でないセルはクリックできない", async () => {
-    const user = userEvent.setup();
     const handleClick = vi.fn();
 
     render(
