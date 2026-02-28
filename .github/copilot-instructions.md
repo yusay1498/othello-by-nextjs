@@ -1,5 +1,19 @@
 # Othello by Next.js - Claude Code カスタムインストラクション
 
+## Language Preference / 言語設定
+
+**When providing code reviews, please respond in Japanese (日本語).** This includes:
+- Pull request review comments
+- Code suggestions and improvements
+- Explanations of issues or bugs
+- Best practice recommendations
+
+コードレビューを行う際は、日本語で応答してください。これには以下が含まれます：
+- プルリクエストのレビューコメント
+- コード改善の提案
+- 問題やバグの説明
+- ベストプラクティスの推奨事項
+
 ## 重要: 言語設定
 - **PRタイトルは英語で記述してください**
 - **PRディスクリプション、コミットメッセージ、コード内のコメントは日本語で記述してください**
