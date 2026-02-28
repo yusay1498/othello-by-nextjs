@@ -108,11 +108,6 @@ GitHub Copilotを使用してコミットメッセージを自動生成できま
 
 このプロジェクトはMITライセンスの下でライセンスされています。詳細は[LICENSE](LICENSE)ファイルを参照してください。
 
-## 🙏 謝辞
-
-- クラシックなオセロ/リバーシボードゲームにインスパイアされています
-- モダンなWeb技術で構築されています
-
-## 📧 連絡先
+## 🔗 リンク
 
 プロジェクトリンク: [https://github.com/yusay1498/othello-by-nextjs](https://github.com/yusay1498/othello-by-nextjs)
