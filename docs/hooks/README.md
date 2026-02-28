@@ -66,9 +66,10 @@ export function useGame(config: GameConfig | null) {
     if (newState.currentPlayer === prevState.currentPlayer) {
       const opponent = getOpponent(prevState.currentPlayer);
       setPassPlayer(opponent);
-      setTimeout(() => setPassPlayer(null), 1000);
+      const timer = setTimeout(() => setPassPlayer(null), 1000);
+      // cleanup不要（setPassPlayerはアンマウント後も安全）
     }
-  }, [state, isGameOver, isCpuThinking]);
+  }, [state, gameOver, isCpuThinking]);
 
   // リスタート
   const handleRestart = useCallback(() => {

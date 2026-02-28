@@ -22,11 +22,13 @@
 
 ## テストツール
 
-| ツール | 用途 |
-|--------|------|
-| Vitest | ドメイン層の単体テスト |
-| React Testing Library | Hooks・コンポーネントのテスト |
-| Playwright（将来） | E2Eテスト |
+**注意:** 以下のテストツールは現時点でプロジェクトに導入されていません。実際にテストを実施する際は、`devDependencies` への追加が必要です。
+
+| ツール | 用途 | インストールコマンド |
+|--------|------|--------------------|
+| Vitest | ドメイン層の単体テスト | `npm install -D vitest` |
+| React Testing Library | Hooks・コンポーネントのテスト | `npm install -D @testing-library/react @testing-library/jest-dom` |
+| Playwright（将来） | E2Eテスト | `npm install -D @playwright/test` |
 
 ## カバレッジ目標
 
@@ -227,6 +229,7 @@ describe('ai', () => {
 ### useGame のテスト
 
 ```ts
+import { describe, test, expect } from 'vitest';
 import { renderHook, act } from '@testing-library/react';
 import { useGame } from './useGame';
 
@@ -568,6 +571,8 @@ jobs:
         uses: codecov/codecov-action@v3
 ```
 
+**セキュリティに関する注意:** 本番環境では、サードパーティアクションを特定のコミットSHAでピン留めすることを推奨します（例: `codecov/codecov-action@54bcd8715eee62d40e33596ef5e8f0f48dbbccab`）。これにより、タグが改変された場合のサプライチェーン攻撃を防ぎます。
+
 **注意:** このサンプルは `package.json` に以下のスクリプトが定義されていることを前提としています：
 
 ```json
@@ -588,6 +593,9 @@ jobs:
 ```ts
 import { describe, test, expect } from 'vitest';
 import { performance } from 'perf_hooks';
+import { createInitialBoard } from './board';
+import { getBestMove } from './ai';
+import type { Player } from './types';
 
 describe('Performance', () => {
   test('getBestMove (depth=2) は2秒以内', () => {
