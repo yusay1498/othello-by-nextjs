@@ -57,6 +57,19 @@ git checkout -b fix/your-fix-name
 - Add comments for complex logic
 - Use meaningful variable and function names
 
+### AI Coding Assistant Constraints
+This project includes custom instructions for AI coding assistants (like Claude Code and GitHub Copilot) to ensure consistency:
+
+- **Location:** `.github/copilot-instructions.md`
+- **Purpose:** Defines project-specific coding standards, commit message formats, and PR guidelines
+- **Key Constraints:**
+  - PR titles must be in English
+  - PR descriptions, commit messages, and code comments must be in Japanese (日本語)
+  - One feature per PR
+  - Use `type(scope): メッセージ` format for commit messages
+
+These constraints are automatically loaded by AI coding assistants that support custom instructions. When contributing, please ensure your changes align with these guidelines.
+
 ### Commit Messages
 Follow this commit message format:
 
