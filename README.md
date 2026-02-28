@@ -1,82 +1,101 @@
 # Othello by Next.js
 
-A modern implementation of the classic Othello (Reversi) board game built with Next.js, React, and TypeScript.
+Next.js、React、TypeScriptで構築された、モダンなオセロ（リバーシ）ボードゲームの実装です。
 
-## 🎮 About Othello
+## 🎮 オセロについて
 
-Othello is a strategy board game for two players, played on an 8×8 board. Players take turns placing pieces with their assigned color facing up. During a play, any pieces of the opponent's color that are between the new piece and any existing pieces of the current player's color are turned over to the current player's color.
+オセロは2人用の戦略ボードゲームで、8×8のボードで行われます。プレイヤーは交互に自分の色の駒を置いていきます。新しい駒と既存の駒の間に挟まれた相手の駒は、すべて自分の色に裏返されます。
 
-## ✨ Features
+## ✨ 機能
 
-- Modern web-based Othello game
-- Built with Next.js 16 and React 19
-- TypeScript for type safety
-- Responsive design with Tailwind CSS
-- Fast and optimized performance
+- モダンなWebベースのオセロゲーム
+- Next.js 16とReact 19で構築
+- TypeScriptによる型安全性
+- Tailwind CSSによるレスポンシブデザイン
+- 高速で最適化されたパフォーマンス
 
-## 🚀 Getting Started
+## 🚀 はじめ方
 
-### Prerequisites
+### 前提条件
 
-- Node.js 20.x or later
-- npm, yarn, or pnpm
+- Node.js 24.x以降
+- npm、yarn、またはpnpm
 
-### Installation
+### インストール
 
-1. Clone the repository:
+1. リポジトリをクローン:
 ```bash
 git clone https://github.com/yusay1498/othello-by-nextjs.git
 cd othello-by-nextjs
 ```
 
-2. Install dependencies:
+2. 依存関係をインストール:
 ```bash
 npm install
-# or
+# または
 yarn install
-# or
+# または
 pnpm install
 ```
 
-3. Run the development server:
+3. 開発サーバーを起動:
 ```bash
 npm run dev
-# or
+# または
 yarn dev
-# or
+# または
 pnpm dev
 ```
 
-4. Open [http://localhost:3000](http://localhost:3000) in your browser to see the application.
+4. ブラウザで [http://localhost:3000](http://localhost:3000) を開いてアプリケーションを確認します。
 
-## 🛠️ Tech Stack
+## 🛠️ 技術スタック
 
-- **Framework:** [Next.js 16](https://nextjs.org/)
-- **UI Library:** [React 19](https://react.dev/)
-- **Language:** [TypeScript](https://www.typescriptlang.org/)
-- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
-- **Linting:** [ESLint](https://eslint.org/)
+- **フレームワーク:** [Next.js 16](https://nextjs.org/)
+- **UIライブラリ:** [React 19](https://react.dev/)
+- **言語:** [TypeScript](https://www.typescriptlang.org/)
+- **スタイリング:** [Tailwind CSS](https://tailwindcss.com/)
+- **リンティング:** [ESLint](https://eslint.org/)
 
-## 📝 Available Scripts
+## 📝 利用可能なスクリプト
 
-- `npm run dev` - Start the development server
-- `npm run build` - Build the application for production
-- `npm run start` - Start the production server
-- `npm run lint` - Run ESLint to check code quality
+- `npm run dev` - 開発サーバーを起動
+- `npm run build` - 本番用にアプリケーションをビルド
+- `npm run start` - 本番サーバーを起動
+- `npm run lint` - ESLintでコード品質をチェック
 
-## 🤝 Contributing
+## 📚 ドキュメント
 
-Contributions are welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md) for details on our code of conduct and the process for submitting pull requests.
+包括的なドキュメントが日本語で提供されています：
 
-## 📄 License
+- **[設計書](DESIGN.md)** - 完全な仕様と設計決定
+- **[ドキュメント索引](docs/README.md)** - ドキュメント全体のナビゲーションガイド
+- **[ドメイン層](docs/domain/README.md)** - ビジネスロジックとゲームルール
+  - [型定義](docs/domain/types.md)
+  - [定数](docs/domain/constants.md)
+  - [盤面操作](docs/domain/board.md)
+  - [ルール](docs/domain/rules.md)
+  - [AI](docs/domain/ai.md)
+  - [勝敗判定](docs/domain/winner.md)
+- **[コンポーネント](docs/components/README.md)** - UIコンポーネント設計
+- **[Hooks](docs/hooks/README.md)** - 状態管理用カスタムフック
+- **[アーキテクチャ](docs/architecture/README.md)** - システムアーキテクチャ
+- **[テスト戦略](docs/testing/README.md)** - テスト戦略と例
+- **[APIリファレンス](docs/api/README.md)** - 完全なAPIドキュメント
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 🤝 コントリビューション
 
-## 🙏 Acknowledgments
+コントリビューションを歓迎します！詳細については[CONTRIBUTING.md](CONTRIBUTING.md)をお読みください。
 
-- Inspired by the classic Othello/Reversi board game
-- Built with modern web technologies
+## 📄 ライセンス
 
-## 📧 Contact
+このプロジェクトはMITライセンスの下でライセンスされています。詳細は[LICENSE](LICENSE)ファイルを参照してください。
 
-Project Link: [https://github.com/yusay1498/othello-by-nextjs](https://github.com/yusay1498/othello-by-nextjs)
+## 🙏 謝辞
+
+- クラシックなオセロ/リバーシボードゲームにインスパイアされています
+- モダンなWeb技術で構築されています
+
+## 📧 連絡先
+
+プロジェクトリンク: [https://github.com/yusay1498/othello-by-nextjs](https://github.com/yusay1498/othello-by-nextjs)
