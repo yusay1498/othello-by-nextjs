@@ -99,6 +99,8 @@ describe('board', () => {
 ```ts
 import { describe, test, expect } from 'vitest';
 import { getLegalMoves, applyMove, isGameOver } from './rules';
+import { createInitialBoard, getScore } from './board';
+import type { Player } from './types';
 
 describe('rules', () => {
   describe('getLegalMoves', () => {
@@ -172,6 +174,9 @@ describe('rules', () => {
 ```ts
 import { describe, test, expect } from 'vitest';
 import { getBestMove, evaluateBoard } from './ai';
+import { createInitialBoard } from './board';
+import { getLegalMoves } from './rules';
+import type { Player } from './types';
 
 describe('ai', () => {
   describe('getBestMove', () => {
@@ -296,6 +301,7 @@ describe('useGame', () => {
 
 ```tsx
 import { render, screen, fireEvent } from '@testing-library/react';
+import { vi } from 'vitest';
 import { Cell } from './Cell';
 
 describe('Cell', () => {
@@ -342,7 +348,7 @@ describe('Cell', () => {
   });
 
   test('クリックでonClickが呼ばれる', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
 
     render(
       <Cell
@@ -358,7 +364,7 @@ describe('Cell', () => {
   });
 
   test('disabled時はクリックできない', () => {
-    const onClick = jest.fn();
+    const onClick = vi.fn();
 
     render(
       <Cell
@@ -547,7 +553,7 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
+          node-version: '24'
 
       - name: Install dependencies
         run: npm install
@@ -560,6 +566,17 @@ jobs:
 
       - name: Upload coverage
         uses: codecov/codecov-action@v3
+```
+
+**注意:** このサンプルは `package.json` に以下のスクリプトが定義されていることを前提としています：
+
+```json
+{
+  "scripts": {
+    "test": "vitest",
+    "test:coverage": "vitest --coverage"
+  }
+}
 ```
 
 ---

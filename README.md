@@ -18,7 +18,7 @@ Next.js、React、TypeScriptで構築された、モダンなオセロ（リバ�
 
 ### 前提条件
 
-- Node.js 20.x以降
+- Node.js 24.x以降
 - npm、yarn、またはpnpm
 
 ### インストール

@@ -344,8 +344,7 @@ console.log(getScore(state.board)); // { black: 2, white: 2 }
 state = applyMove(state, 19);
 console.log(getScore(state.board)); // { black: 4, white: 1 }
 
-// 手番交代
-state.currentPlayer = getOpponent(state.currentPlayer);
+// applyMoveが手番交代も行う
 console.log(state.currentPlayer); // "white"
 ```
 

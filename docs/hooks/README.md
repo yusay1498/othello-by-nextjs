@@ -44,15 +44,15 @@ export function useGame(config: GameConfig | null) {
   // 導出値
   const legalMoves = useMemo(() => getLegalMoves(state), [state]);
   const score = useMemo(() => getScore(state.board), [state.board]);
-  const isGameOver = useMemo(() => isGameOver(state), [state]);
+  const gameOver = useMemo(() => isGameOver(state), [state]);
   const result = useMemo(
-    () => getGameResult(state.board, isGameOver),
-    [state.board, isGameOver]
+    () => getGameResult(state.board, gameOver),
+    [state.board, gameOver]
   );
 
   // 手を打つ
   const handleMove = useCallback((index: Position) => {
-    if (isGameOver || isCpuThinking) return;
+    if (gameOver || isCpuThinking) return;
 
     const prevState = state;
     const newState = applyMove(state, index);
@@ -90,7 +90,7 @@ export function useGame(config: GameConfig | null) {
     legalMoves,
     score,
     result,
-    isGameOver,
+    isGameOver: gameOver,
     isCpuThinking,
     passPlayer,
     handleMove,
@@ -251,11 +251,13 @@ describe('useGame', () => {
 ### useCpuTurnのテスト
 
 ```ts
+import { vi } from 'vitest';
+
 describe('useCpuTurn', () => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
 
   test('CPUのターンで自動的に手を打つ', () => {
-    const onMove = jest.fn();
+    const onMove = vi.fn();
     const state = {
       board: createInitialBoard(),
       currentPlayer: "white" as Player,
@@ -268,7 +270,7 @@ describe('useCpuTurn', () => {
     renderHook(() => useCpuTurn(state, config, onMove));
 
     // 500ms後にonMoveが呼ばれる
-    jest.advanceTimersByTime(500);
+    vi.advanceTimersByTime(500);
 
     expect(onMove).toHaveBeenCalledTimes(1);
   });

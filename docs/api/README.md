@@ -113,7 +113,7 @@ type WinnerResult =
 
 #### BOARD_SIZE
 ```ts
-const BOARD_SIZE: 8;
+const BOARD_SIZE = 8;
 ```
 盤面の一辺のサイズ。
 
@@ -121,7 +121,7 @@ const BOARD_SIZE: 8;
 
 #### TOTAL_CELLS
 ```ts
-const TOTAL_CELLS: 64;
+const TOTAL_CELLS = 64;
 ```
 盤面の総マス数。
 
@@ -129,8 +129,7 @@ const TOTAL_CELLS: 64;
 
 #### DIRECTIONS
 ```ts
-const DIRECTIONS: readonly number[];
-// [-9, -8, -7, -1, 1, 7, 8, 9]
+const DIRECTIONS: readonly number[] = [-9, -8, -7, -1, 1, 7, 8, 9] as const;
 ```
 8方向の移動量。
 
@@ -138,8 +137,7 @@ const DIRECTIONS: readonly number[];
 
 #### CORNERS
 ```ts
-const CORNERS: readonly number[];
-// [0, 7, 56, 63]
+const CORNERS: readonly number[] = [0, 7, 56, 63] as const;
 ```
 盤面の4つの角。
 
@@ -147,8 +145,9 @@ const CORNERS: readonly number[];
 
 #### POSITION_WEIGHTS
 ```ts
-const POSITION_WEIGHTS: readonly number[];
-// [100, -20, 10, ..., 100]
+const POSITION_WEIGHTS: readonly number[] = [
+  100, -20, 10, ..., 100
+] as const;
 ```
 AI評価関数用の位置重み（64要素）。
 

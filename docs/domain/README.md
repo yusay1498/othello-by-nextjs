@@ -189,17 +189,15 @@ console.log('結果:', result); // { type: 'playing' }
 
 ### 評価関数の差し替え
 
-AI層は評価関数を差し替え可能な設計になっています：
+AI層は内部で評価関数を切り替え可能な設計になっています。
+公開APIとしては、`state` と探索深さ `depth` を渡すだけで最善手を取得できます：
 
 ```ts
-// カスタム評価関数
-function customEvaluateBoard(board: Board, player: Player): number {
-  // 独自の評価ロジック
-}
-
-// 使用時に注入
-const bestMove = getBestMove(state, 2, customEvaluateBoard);
+// 評価関数は AI モジュール内部で使用される
+const bestMove = getBestMove(state, 2);
 ```
+
+将来的に評価関数をカスタマイズする場合は、AI モジュール内で評価関数を切り替えるか、オプショナルな第3引数として評価関数を受け取るように拡張できます。
 
 ### 新しいゲームモードの追加
 
