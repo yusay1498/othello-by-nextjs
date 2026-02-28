@@ -9,14 +9,12 @@ import { getOpponent } from "./board";
  * @returns true if the move is valid, false otherwise
  */
 export function isValidMove(from: Position, direction: Direction): boolean {
-  const row = Math.floor(from / BOARD_SIZE);
   const col = from % BOARD_SIZE;
   const next = from + direction;
 
   // Out of bounds check
   if (next < 0 || next >= TOTAL_CELLS) return false;
 
-  const nextRow = Math.floor(next / BOARD_SIZE);
   const nextCol = next % BOARD_SIZE;
 
   // Horizontal boundary check for left-moving directions

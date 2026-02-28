@@ -6,7 +6,7 @@ import {
   isValidMove,
 } from "../rules";
 import { createInitialBoard, getScore } from "../board";
-import type { GameState, Player } from "../types";
+import type { GameState } from "../types";
 
 describe("isValidMove", () => {
   test("左端から左への移動は無効", () => {

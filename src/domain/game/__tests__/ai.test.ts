@@ -3,7 +3,7 @@ import { evaluateBoard, getBestMove } from "../ai";
 import { createInitialBoard } from "../board";
 import { getLegalMoves } from "../rules";
 import { CORNERS } from "../constants";
-import type { GameState, Player, Board } from "../types";
+import type { GameState, Board } from "../types";
 
 describe("evaluateBoard", () => {
   test("初期盤面は互角（0付近）", () => {
@@ -206,7 +206,7 @@ describe("AI統合テスト", () => {
   });
 
   test("ゲーム進行中でも適切な手を選べる", () => {
-    let state: GameState = {
+    const state: GameState = {
       board: createInitialBoard(),
       currentPlayer: "black",
     };
