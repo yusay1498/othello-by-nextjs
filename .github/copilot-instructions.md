@@ -1,4 +1,4 @@
-# Othello by Next.js - Claude Code カスタムインストラクション
+# Othello by Next.js - AI Coding Assistant Instructions (Copilot/Claude)
 
 ## Language Preference / 言語設定
 

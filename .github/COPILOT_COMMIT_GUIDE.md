@@ -73,12 +73,12 @@ git commit
 
 2. 以下のようなプロンプトを入力:
 ```
-現在のステージされた変更に対して、先頭大文字の英語で簡潔なコミットメッセージを生成してください。プレフィックスは不要で、50文字以内、ピリオドやカンマは避けてください。
+現在のステージされた変更に対して、日本語でtype(scope): メッセージの形式でコミットメッセージを生成してください。タイプはfeat, fix, docs, style, refactor, test, choreのいずれかを使用してください。
 ```
 
 または英語で:
 ```
-Generate a concise commit message for the currently staged changes starting with a capital letter in English, no prefix needed, under 50 characters, avoiding periods and commas
+Generate a commit message for the currently staged changes in Japanese using the format: type(scope): メッセージ. Use types like feat, fix, docs, style, refactor, test, or chore.
 ```
 
 3. 生成されたメッセージをコピーして使用
@@ -89,7 +89,7 @@ GitHub CLI (`gh`) がインストールされている場合:
 
 ```bash
 # 変更の差分を取得してCopilotに送信
-git diff --cached | gh copilot suggest "Generate a concise commit message starting with capital letter, no prefix, under 50 characters"
+git diff --cached | gh copilot suggest "Generate a commit message in Japanese using format: type(scope): メッセージ"
 ```
 
 ## コミットメッセージのベストプラクティス
@@ -98,28 +98,27 @@ git diff --cached | gh copilot suggest "Generate a concise commit message starti
 
 ### 形式
 
-**1行目:**
-- 必ず先頭大文字の英語で記述
-- プレフィックス（feat:, fix: など）は不要
-- 変更内容を簡潔に記述
-- ピリオド、カンマ、接続詞はできるだけ避ける
-- 1文でかつ50文字以内に収める
+**日本語での従来のコミット形式:**
+- 日本語で記述してください
+- `type(scope): メッセージ` の形式を使用
+- タイプ: feat（機能追加）, fix（バグ修正）, docs（ドキュメント）, style（スタイル）, refactor（リファクタリング）, test（テスト）, chore（雑務）
+- メッセージは明確で簡潔に保ってください
 
 ### 例
 
 ```
-Add move validation logic
-Correct piece flip calculation
-Update installation instructions
-Implement board state management
-Fix visual feedback on piece placement
+feat(game): オセロボードの初期配置を実装
+fix(ui): モバイル表示時のレイアウト崩れを修正
+refactor(logic): 駒の裏返し処理を最適化
+docs(readme): インストール手順を更新
+test(rules): 合法手判定のテストケースを追加
 ```
 
 **悪い例 / Bad examples:**
 ```
-feat(game): Add move validation logic.  ❌ (プレフィックスとピリオドがある)
-add move validation logic  ❌ (先頭が小文字)
-Add move validation logic, and update tests  ❌ (カンマと接続詞がある)
+Add move validation logic  ❌ (英語で記述されている・プレフィックスがない)
+feat(game): Add move validation logic  ❌ (英語で記述されている)
+オセロボードの初期配置を実装  ❌ (type(scope)プレフィックスがない)
 ```
 
 ## トラブルシューティング
@@ -216,7 +215,7 @@ git commit
 
 2. Enter a prompt like:
 ```
-Generate a concise commit message for the currently staged changes starting with a capital letter in English, no prefix needed, under 50 characters, avoiding periods and commas
+Generate a commit message for the currently staged changes in Japanese using the format: type(scope): メッセージ. Use types like feat, fix, docs, style, refactor, test, or chore.
 ```
 
 3. Copy the generated message and use it
@@ -227,7 +226,7 @@ If you have GitHub CLI (`gh`) installed:
 
 ```bash
 # Get the diff and send it to Copilot
-git diff --cached | gh copilot suggest "Generate a concise commit message starting with capital letter, no prefix, under 50 characters"
+git diff --cached | gh copilot suggest "Generate a commit message in Japanese using format: type(scope): メッセージ"
 ```
 
 ## Commit Message Best Practices
@@ -236,28 +235,27 @@ This project uses the following format:
 
 ### Format
 
-**First line:**
-- Must start with a capital letter in English
-- No prefix (feat:, fix:, etc.) needed
-- Describe changes concisely
-- Avoid periods, commas, and conjunctions
-- Keep it to one sentence under 50 characters
+**Japanese Conventional Commit Format:**
+- Write in Japanese (日本語)
+- Use format: `type(scope): メッセージ`
+- Types: feat（機能追加）, fix（バグ修正）, docs（ドキュメント）, style（スタイル）, refactor（リファクタリング）, test（テスト）, chore（雑務）
+- Keep messages clear and concise
 
 ### Examples
 
 ```
-Add move validation logic
-Correct piece flip calculation
-Update installation instructions
-Implement board state management
-Fix visual feedback on piece placement
+feat(game): オセロボードの初期配置を実装
+fix(ui): モバイル表示時のレイアウト崩れを修正
+refactor(logic): 駒の裏返し処理を最適化
+docs(readme): インストール手順を更新
+test(rules): 合法手判定のテストケースを追加
 ```
 
 **Bad examples:**
 ```
-feat(game): Add move validation logic.  ❌ (has prefix and period)
-add move validation logic  ❌ (starts with lowercase)
-Add move validation logic, and update tests  ❌ (has comma and conjunction)
+Add move validation logic  ❌ (written in English, no prefix)
+feat(game): Add move validation logic  ❌ (written in English)
+オセロボードの初期配置を実装  ❌ (no type(scope) prefix)
 ```
 
 ## Troubleshooting
