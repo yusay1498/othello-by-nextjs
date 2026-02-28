@@ -21,3 +21,6 @@ export {
   CORNERS,
   POSITION_WEIGHTS,
 } from './constants';
+
+// ボード関数のエクスポート
+export { createInitialBoard, getScore, getOpponent } from './board';
