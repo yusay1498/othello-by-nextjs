@@ -134,7 +134,7 @@ describe("useCpuTurn", () => {
       expect(setIsCpuThinking).toHaveBeenCalledWith(false);
     });
 
-    test("手を打つ前にCPU思考中フラグが下ろされる", () => {
+    test("手を打った後にCPU思考中フラグが下ろされる", () => {
       const state: GameState = {
         board: createInitialBoard(),
         currentPlayer: "white",
@@ -164,11 +164,11 @@ describe("useCpuTurn", () => {
       // 500ms経過
       vi.advanceTimersByTime(500);
 
-      // setIsCpuThinking(false)がonMoveの前に呼ばれることを確認
+      // onMoveの後にsetIsCpuThinking(false)が呼ばれることを確認
       expect(callOrder).toEqual([
         "setIsCpuThinking(true)",
-        "setIsCpuThinking(false)",
         "onMove",
+        "setIsCpuThinking(false)",
       ]);
     });
 
