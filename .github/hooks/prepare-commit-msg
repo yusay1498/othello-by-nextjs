@@ -19,10 +19,11 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
   # Get the diff of staged changes
   STAGED_DIFF=$(git diff --cached --stat)
 
-  # If there are staged changes and the commit message is empty or default
-  if [ -n "$STAGED_DIFF" ] && ([ ! -s "$COMMIT_MSG_FILE" ] || grep -q "^#" "$COMMIT_MSG_FILE"); then
-    # Save existing content (if any)
-    EXISTING_CONTENT=$(cat "$COMMIT_MSG_FILE")
+  # If there are staged changes and the commit message is empty or contains only comments
+  if [ -n "$STAGED_DIFF" ] && { [ ! -s "$COMMIT_MSG_FILE" ] || ! grep -q '^[[:space:]]*[^#[:space:]]' "$COMMIT_MSG_FILE"; }; then
+    # Save existing content to temp file to preserve formatting
+    TEMP_FILE="${COMMIT_MSG_FILE}.tmp"
+    cp "$COMMIT_MSG_FILE" "$TEMP_FILE" 2>/dev/null || true
 
     # Write placeholder and helpful context as comments that Copilot can read
     cat > "$COMMIT_MSG_FILE" << EOF
@@ -49,8 +50,10 @@ $(printf '%s\n' "$STAGED_DIFF" | head -20 | sed 's/^/# /')
 EOF
 
     # Append existing content after our template
-    if [ -n "$EXISTING_CONTENT" ]; then
-      printf '\n%s\n' "$EXISTING_CONTENT" >> "$COMMIT_MSG_FILE"
+    if [ -f "$TEMP_FILE" ] && [ -s "$TEMP_FILE" ]; then
+      printf '\n' >> "$COMMIT_MSG_FILE"
+      cat "$TEMP_FILE" >> "$COMMIT_MSG_FILE"
+      rm -f "$TEMP_FILE"
     fi
   fi
 fi
