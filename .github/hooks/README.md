@@ -14,7 +14,7 @@ Runs before the commit message editor opens and provides context for GitHub Copi
 
 **Features / 機能:**
 - Adds staged changes summary to commit message template / ステージされた変更の概要をコミットメッセージテンプレートに追加
-- Includes Conventional Commits guidelines / Conventional Commitsガイドラインを含む
+- Provides simple, no-prefix commit message guidelines / プレフィックスなしのシンプルなコミットメッセージガイドラインを提供
 - Bilingual (Japanese/English) guidance / 日英バイリンガルガイダンス
 
 ## Setup / セットアップ

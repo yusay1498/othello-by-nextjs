@@ -39,7 +39,7 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
 # - Keep it to one sentence under 50 characters
 #
 # ステージされた変更 / Staged changes:
-# $(echo "$STAGED_DIFF" | head -20)
+$(printf '%s\n' "$STAGED_DIFF" | head -20 | sed 's/^/# /')
 #
 # GitHub Copilotを使用して、上記の変更に基づいて適切なコミットメッセージを生成できます。
 # You can use GitHub Copilot to generate an appropriate commit message based on the changes above.
