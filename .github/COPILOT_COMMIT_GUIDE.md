@@ -2,6 +2,21 @@
 
 このガイドでは、GitHub Copilotを使用してローカルコミットのメッセージを生成する方法を説明します。
 
+## クイックスタート / Quick Start
+
+最速でセットアップするには、以下のコマンドを実行してください：
+
+```bash
+# セットアップスクリプトを実行 / Run the setup script
+./.github/scripts/setup-copilot-commits.sh
+
+# 変更をステージング / Stage your changes
+git add <files>
+
+# コミット（Copilotが提案を行います）/ Commit (Copilot will suggest messages)
+git commit
+```
+
 ## 前提条件
 
 - GitHub Copilot がインストールされていること
