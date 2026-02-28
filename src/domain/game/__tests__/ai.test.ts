@@ -56,7 +56,7 @@ describe('ai', () => {
       expect(move).toBeNull();
     });
 
-    it('初期盤面で有効な手を返す（基本動作確認）', () => {
+    it('合法手が1つの場合はその手を返す', () => {
       const state: GameState = {
         board: createInitialBoard(),
         currentPlayer: 'black',
