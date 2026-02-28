@@ -57,21 +57,33 @@ git checkout -b fix/your-fix-name
 - Add comments for complex logic
 - Use meaningful variable and function names
 
+### AI Coding Assistant Constraints
+This project includes custom instructions for AI coding assistants (like Claude Code and GitHub Copilot) to ensure consistency:
+
+- **Location:** `.github/copilot-instructions.md`
+- **Purpose:** Defines project-specific coding standards, commit message formats, and PR guidelines
+- **Key Constraints:**
+  - PR titles must be in English
+  - PR descriptions and code comments must be in Japanese (日本語)
+  - One feature per PR
+  - Commit messages follow the format described below
+
+These constraints are automatically loaded by AI coding assistants that support custom instructions. When contributing, please ensure your changes align with these guidelines.
+
 ### Commit Messages
 Follow this commit message format:
 
-**First line:**
-- Must start with a capital letter in English
-- No prefix (feat:, fix:, etc.) needed
-- Describe changes concisely in one sentence
-- Avoid periods, commas, and conjunctions
-- Keep under 50 characters
+**Format:**
+- Write in Japanese (日本語)
+- Use conventional commit format: `type(scope): メッセージ`
+- Types: feat（機能追加）, fix（バグ修正）, docs（ドキュメント）, style（スタイル）, refactor（リファクタリング）, test（テスト）, chore（雑務）
+- Keep messages clear and concise
 
 Examples:
 ```
-Add move validation logic
-Correct piece flip calculation
-Update installation instructions
+feat(game): オセロボードの初期配置を実装
+fix(ui): モバイル表示時のレイアウト崩れを修正
+refactor(logic): 駒の裏返し処理を最適化
 ```
 
 #### Using GitHub Copilot for Commit Messages
