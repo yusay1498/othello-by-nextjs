@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest';
 import { evaluateBoard, getBestMove } from '../ai';
 import { createInitialBoard } from '../board';
+import { TOTAL_CELLS } from '../constants';
 import type { GameState, Board } from '../types';
 
 describe('ai', () => {
@@ -17,7 +18,7 @@ describe('ai', () => {
 
     it('石が多い方が有利に評価される', () => {
       // 黒が多い盤面
-      const board: Board = Array(64).fill(null);
+      const board: Board = Array(TOTAL_CELLS).fill(null);
       board[0] = 'black';
       board[1] = 'black';
       board[2] = 'black';
@@ -31,10 +32,10 @@ describe('ai', () => {
 
     it('角を取った方が有利に評価される', () => {
       // 角の位置は重み100
-      const boardWithCorner: Board = Array(64).fill(null);
+      const boardWithCorner: Board = Array(TOTAL_CELLS).fill(null);
       boardWithCorner[0] = 'black'; // 左上角
 
-      const boardWithoutCorner: Board = Array(64).fill(null);
+      const boardWithoutCorner: Board = Array(TOTAL_CELLS).fill(null);
       boardWithoutCorner[1] = 'black'; // 角じゃない位置
 
       const evalWithCorner = evaluateBoard(boardWithCorner, 'black');
@@ -47,7 +48,7 @@ describe('ai', () => {
   describe('getBestMove', () => {
     it('合法手がない場合はnullを返す', () => {
       const state: GameState = {
-        board: Array(64).fill('black'), // 全て黒（合法手なし）
+        board: Array(TOTAL_CELLS).fill('black'), // 全て黒（合法手なし）
         currentPlayer: 'white',
       };
 
@@ -55,7 +56,7 @@ describe('ai', () => {
       expect(move).toBeNull();
     });
 
-    it('合法手が1つの場合はその手を返す', () => {
+    it('初期盤面で有効な手を返す（基本動作確認）', () => {
       const state: GameState = {
         board: createInitialBoard(),
         currentPlayer: 'black',
@@ -65,7 +66,7 @@ describe('ai', () => {
       expect(move).not.toBeNull();
       expect(typeof move).toBe('number');
       expect(move).toBeGreaterThanOrEqual(0);
-      expect(move).toBeLessThan(64);
+      expect(move).toBeLessThan(TOTAL_CELLS);
     });
 
     it('初期盤面で有効な手を返す', () => {
