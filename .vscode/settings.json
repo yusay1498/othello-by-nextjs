@@ -24,6 +24,9 @@
   "github.copilot.editor.enableAutoCompletions": true,
   "github.copilot.chat.commitMessageGeneration.instructions": [
     {
+      "text": "1行目は必ず先頭大文字の英語で記述してください。プレフィックスは不要です。変更内容を簡潔に記述してください。ピリオド、カンマ、接続詞はできるだけ避け、1文でかつ50文字以内に収めてください。"
+    },
+    {
       "file": ".github/copilot-commit-instructions.md"
     }
   ],
