@@ -59,9 +59,7 @@ export function GameContainer() {
         disabled={game.isCpuThinking || game.isGameOver}
       />
 
-      {game.passPlayer && (
-        <PassNotification player={game.passPlayer} duration={1000} />
-      )}
+      {game.passPlayer && <PassNotification player={game.passPlayer} />}
 
       {game.isGameOver && (
         <GameResult
