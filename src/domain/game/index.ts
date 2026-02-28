@@ -17,8 +17,8 @@ export {
   POSITION_WEIGHTS,
 } from './constants';
 
-// ボード関数のエクスポート
-export { createInitialBoard, getScore, getOpponent } from './board';
+// ルール関数のエクスポート
+export { getLegalMoves, applyMove, isGameOver } from './rules';
 export { BOARD_SIZE, TOTAL_CELLS } from './constants';
 
 // ボード関数のエクスポート
