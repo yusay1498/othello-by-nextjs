@@ -16,8 +16,8 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
   # ステージされたファイルの状態を取得
   STAGED_STATUS=$(git diff --cached --name-status)
   
-  # ファイル数をカウント
-  FILE_COUNT=$(echo "$STAGED_STATUS" | grep -c .)
+  # ファイル数をカウント（空行を除外）
+  FILE_COUNT=$(echo "$STAGED_STATUS" | grep -v "^$" | wc -l | tr -d ' ')
 
   # If there are staged changes and the commit message is empty or contains only comments
   if [ -n "$STAGED_DIFF" ] && { [ ! -s "$COMMIT_MSG_FILE" ] || ! grep -q '^[[:space:]]*[^#[:space:]]' "$COMMIT_MSG_FILE"; }; then
@@ -40,10 +40,19 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
     CONFIG_CHANGES=""
     
     # TypeScript/JavaScript関数の追加を検出
-    ADDED_FUNCTIONS=$(echo "$ADDED_LINES" | grep -E "^\\+\\s*(export\\s+)?(async\\s+)?function\\s+[a-zA-Z_]|^\\+\\s*(export\\s+)?const\\s+[a-zA-Z_][a-zA-Z0-9_]*\\s*=\\s*(async\\s+)?\\(|^\\+\\s*(export\\s+)?const\\s+[a-zA-Z_][a-zA-Z0-9_]*\\s*=\\s*(async\\s+)?\\[a-zA-Z]" | sed 's/^+//' | head -5)
+    # パターン1: 通常の関数宣言 (function foo)
+    # パターン2: アロー関数 (const foo = () => / const foo = async () =>)
+    # パターン3: export付き関数
+    FUNC_PATTERN_NORMAL="^\\+\\s*(export\\s+)?(async\\s+)?function\\s+[a-zA-Z_]"
+    FUNC_PATTERN_ARROW="^\\+\\s*(export\\s+)?const\\s+[a-zA-Z_][a-zA-Z0-9_]*\\s*=\\s*(async\\s+)?\\("
+    ADDED_FUNCTIONS=$(echo "$ADDED_LINES" | grep -E "$FUNC_PATTERN_NORMAL|$FUNC_PATTERN_ARROW" | sed 's/^+//' | head -5)
     
     # クラス/コンポーネントの追加を検出
-    ADDED_CLASSES=$(echo "$ADDED_LINES" | grep -E "^\\+\\s*(export\\s+)?(default\\s+)?class\\s+[A-Z]|^\\+\\s*(export\\s+)?(default\\s+)?function\\s+[A-Z][a-zA-Z]*\\s*\\(" | sed 's/^+//' | head -3)
+    # パターン1: クラス宣言 (class Foo)
+    # パターン2: 大文字で始まる関数（Reactコンポーネント）
+    CLASS_PATTERN="^\\+\\s*(export\\s+)?(default\\s+)?class\\s+[A-Z]"
+    COMPONENT_PATTERN="^\\+\\s*(export\\s+)?(default\\s+)?function\\s+[A-Z][a-zA-Z]*\\s*\\("
+    ADDED_CLASSES=$(echo "$ADDED_LINES" | grep -E "$CLASS_PATTERN|$COMPONENT_PATTERN" | sed 's/^+//' | head -3)
     
     # React コンポーネントの検出
     REACT_COMPONENTS=$(echo "$ADDED_LINES" | grep -E "^\\+\\s*return\\s*\\(|^\\+\\s*<[A-Z][a-zA-Z]*|^\\+\\s*(export\\s+)?(default\\s+)?function\\s+[A-Z]" | head -3)
@@ -120,9 +129,9 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
         M)
           # 修正: 変更内容から推測
           
-          # 追加された行数と削除された行数をカウント
-          ADDED_COUNT=$(echo "$ADDED_LINES" | grep -c . || echo "0")
-          REMOVED_COUNT=$(echo "$REMOVED_LINES" | grep -c . || echo "0")
+          # 追加された行数と削除された行数をカウント（空行を除外）
+          ADDED_COUNT=$(echo "$ADDED_LINES" | grep -v "^$" | wc -l | tr -d ' ')
+          REMOVED_COUNT=$(echo "$REMOVED_LINES" | grep -v "^$" | wc -l | tr -d ' ')
           
           # 関数の追加を優先的に検出
           if [ -n "$ADDED_FUNCTIONS" ]; then
@@ -177,15 +186,15 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
     else
       # 複数ファイルの場合: 共通のパターンを探す
       
-      # 追加されたファイル
-      ADDED_FILES=$(echo "$STAGED_STATUS" | grep "^A" | wc -l | tr -d ' ')
-      # 修正されたファイル
-      MODIFIED_FILES=$(echo "$STAGED_STATUS" | grep "^M" | wc -l | tr -d ' ')
-      # 削除されたファイル
-      DELETED_FILES=$(echo "$STAGED_STATUS" | grep "^D" | wc -l | tr -d ' ')
+      # ファイル状態をカテゴリ別にカウント（一度のパースで全て取得）
+      ADDED_FILES=$(echo "$STAGED_STATUS" | grep -c "^A" || echo "0")
+      MODIFIED_FILES=$(echo "$STAGED_STATUS" | grep -c "^M" || echo "0")
+      DELETED_FILES=$(echo "$STAGED_STATUS" | grep -c "^D" || echo "0")
       
-      COMMON_DIR=$(echo "$STAGED_STATUS" | awk '{print $NF}' | xargs -I{} dirname {} | sort -u | head -1)
-      UNIQUE_DIRS=$(echo "$STAGED_STATUS" | awk '{print $NF}' | xargs -I{} dirname {} | sort -u | wc -l | tr -d ' ')
+      # ディレクトリ情報を一度だけ取得
+      FILE_DIRS=$(echo "$STAGED_STATUS" | awk '{print $NF}' | xargs -I{} dirname {})
+      COMMON_DIR=$(echo "$FILE_DIRS" | sort -u | head -1)
+      UNIQUE_DIRS=$(echo "$FILE_DIRS" | sort -u | wc -l | tr -d ' ')
       
       # コンポーネントとテストのセット
       if echo "$STAGED_STATUS" | grep -qE "components" && echo "$STAGED_STATUS" | grep -qE "test|spec"; then
@@ -201,14 +210,14 @@ if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
         else
           INITIAL_MSG="Update $DIR_NAME"
         fi
-      # テストファイルのみ
-      elif echo "$STAGED_STATUS" | awk '{print $NF}' | grep -qE "test|spec" && [ "$FILE_COUNT" -le 3 ]; then
+      # テストファイルのみ（ファイルパスにtest/specを含む）
+      elif echo "$STAGED_STATUS" | awk '{print $NF}' | grep -qE "(test|spec)" && [ "$FILE_COUNT" -le 3 ]; then
         INITIAL_MSG="Update tests"
-      # ドキュメントのみ
+      # ドキュメントのみ（.mdファイル）
       elif echo "$STAGED_STATUS" | awk '{print $NF}' | grep -qiE "\.md$" && [ "$FILE_COUNT" -le 3 ]; then
         INITIAL_MSG="Update documentation"
-      # 設定ファイルのみ
-      elif echo "$STAGED_STATUS" | awk '{print $NF}' | grep -qE "config|\.json$|\.yaml$|\.yml$" && [ "$FILE_COUNT" -le 3 ]; then
+      # 設定ファイルのみ（config, json, yaml, yml）
+      elif echo "$STAGED_STATUS" | awk '{print $NF}' | grep -qE "(config|\.json$|\.yaml$|\.yml$)" && [ "$FILE_COUNT" -le 3 ]; then
         INITIAL_MSG="Update configuration files"
       else
         # より詳細な説明を生成
@@ -246,6 +255,12 @@ $(echo "$ADDED_IMPORTS" | head -3 | sed 's/^/# + /')"
     fi
 
     # 主要な変更行を抽出（Copilotに詳細なコンテキストを提供）
+    # 除外パターン:
+    #   ^\\+\\s*$       - 空行
+    #   ^\\+\\s*//      - 単一行コメント (//)
+    #   ^\\+\\s*#       - シェル/Python コメント (#)
+    #   ^\\+\\s*/\\*    - ブロックコメント開始 (/*)
+    #   ^\\+\\s*\\*     - ブロックコメント継続 (*)
     KEY_CHANGES=$(echo "$ADDED_LINES" | grep -vE "^\\+\\s*$|^\\+\\s*//|^\\+\\s*#|^\\+\\s*/\\*|^\\+\\s*\\*" | head -10)
 
     # Write initial message and helpful context for Copilot
