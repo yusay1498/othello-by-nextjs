@@ -13,6 +13,7 @@ interface CellProps {
 export function Cell({ value, isLegal, onClick, disabled }: CellProps) {
   return (
     <button
+      type="button"
       onClick={onClick}
       disabled={disabled || !isLegal}
       className={`

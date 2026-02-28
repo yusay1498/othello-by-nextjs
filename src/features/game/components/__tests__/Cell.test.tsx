@@ -69,7 +69,7 @@ describe("Cell", () => {
     expect(handleClick).not.toHaveBeenCalled();
   });
 
-  it("合法手でないセルはクリックできない", async () => {
+  it("合法手でないセルはクリックできない", () => {
     const handleClick = vi.fn();
 
     render(
