@@ -1,3 +1,4 @@
+import { memo } from "react";
 import type { Cell as CellType } from "@/domain/game/types";
 
 interface CellProps {
@@ -9,8 +10,9 @@ interface CellProps {
 
 /**
  * オセロの1マスを表示するコンポーネント
+ * パフォーマンス最適化のためReact.memoでメモ化
  */
-export function Cell({ value, isLegal, onClick, disabled }: CellProps) {
+export const Cell = memo(function Cell({ value, isLegal, onClick, disabled }: CellProps) {
   return (
     <button
       type="button"
@@ -52,4 +54,4 @@ export function Cell({ value, isLegal, onClick, disabled }: CellProps) {
       )}
     </button>
   );
-}
+});
