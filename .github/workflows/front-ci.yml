@@ -1,10 +1,8 @@
 name: Lint and Build
 
 on:
-  push:
-    branches: "**"
   pull_request:
-    branches: [ master ]
+    branches: "**"
 
 jobs:
   lint-and-build:
