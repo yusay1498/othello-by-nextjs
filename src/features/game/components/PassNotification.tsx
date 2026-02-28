@@ -5,7 +5,7 @@ import type { Player } from "@/domain/game/types";
 
 interface PassNotificationProps {
   player: Player | null;
-  duration: number;
+  duration?: number;
   onComplete?: () => void;
 }
 
@@ -15,7 +15,7 @@ interface PassNotificationProps {
  */
 export function PassNotification({
   player,
-  duration,
+  duration = 1000,
   onComplete,
 }: PassNotificationProps) {
   // onCompleteの最新参照を保持してタイマーリセットを防ぐ
