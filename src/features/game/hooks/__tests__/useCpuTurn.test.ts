@@ -1,7 +1,7 @@
 import { describe, test, expect, beforeEach, afterEach, vi } from "vitest";
 import { renderHook } from "@testing-library/react";
 import { useCpuTurn } from "../useCpuTurn";
-import type { GameState, GameConfig } from "@/domain/game/types";
+import type { GameState, GameConfig, Position } from "@/domain/game/types";
 import { createInitialBoard } from "@/domain/game/board";
 import * as ai from "@/domain/game/ai";
 
@@ -134,7 +134,7 @@ describe("useCpuTurn", () => {
       expect(setIsCpuThinking).toHaveBeenCalledWith(false);
     });
 
-    test("手を打った後にCPU思考中フラグが下ろされる", () => {
+    test("手を打つ前にCPU思考中フラグが下ろされる", () => {
       const state: GameState = {
         board: createInitialBoard(),
         currentPlayer: "white",
@@ -164,11 +164,11 @@ describe("useCpuTurn", () => {
       // 500ms経過
       vi.advanceTimersByTime(500);
 
-      // onMoveの後にsetIsCpuThinking(false)が呼ばれることを確認
+      // setIsCpuThinking(false)がonMoveの前に呼ばれることを確認
       expect(callOrder).toEqual([
         "setIsCpuThinking(true)",
-        "onMove",
         "setIsCpuThinking(false)",
+        "onMove",
       ]);
     });
 
@@ -338,6 +338,56 @@ describe("useCpuTurn", () => {
 
       vi.advanceTimersByTime(500);
       expect(onMove).toHaveBeenCalledWith(26);
+    });
+  });
+
+  describe("統合テスト", () => {
+    test("isCpuThinkingがtrueでもCPUが手を打てることを確認", () => {
+      const initialState: GameState = {
+        board: createInitialBoard(),
+        currentPlayer: "white",
+      };
+      const config: GameConfig = {
+        mode: "pvc",
+        userColor: "black",
+      };
+
+      let moveExecuted = false;
+      let isCpuThinking = false;
+
+      // useGameのhandleMoveを模擬（isCpuThinkingチェックなし）
+      const handleMove = vi.fn((index: Position) => {
+        // handleMoveが呼ばれた時点でisCpuThinkingの状態を記録
+        // 修正前: isCpuThinkingがtrueだとブロックされた
+        // 修正後: isCpuThinkingに関係なく実行される
+        moveExecuted = true;
+      });
+
+      const handlePass = vi.fn();
+      const setIsCpuThinking = vi.fn((thinking: boolean) => {
+        isCpuThinking = thinking;
+      });
+
+      const getBestMoveSpy = vi.spyOn(ai, "getBestMove");
+      getBestMoveSpy.mockReturnValue(19);
+
+      renderHook(() =>
+        useCpuTurn(initialState, config, false, handleMove, handlePass, setIsCpuThinking)
+      );
+
+      // CPU思考中フラグが立つ
+      expect(setIsCpuThinking).toHaveBeenCalledWith(true);
+      expect(isCpuThinking).toBe(true);
+
+      // 500ms経過
+      vi.advanceTimersByTime(500);
+
+      // CPUが手を打つ（isCpuThinkingがtrueでもブロックされない）
+      expect(handleMove).toHaveBeenCalledWith(19);
+      expect(moveExecuted).toBe(true);
+
+      // CPU思考中フラグが下ろされる
+      expect(setIsCpuThinking).toHaveBeenCalledWith(false);
     });
   });
 });

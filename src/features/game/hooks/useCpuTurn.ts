@@ -66,15 +66,15 @@ export function useCpuTurn(
     timerRef.current = setTimeout(() => {
       const bestMove = getBestMove(state);
 
+      // CPU思考中フラグを下ろす（手を打つ前に下ろす）
+      setIsCpuThinkingRef.current(false);
+
       // 合法手がある場合は手を打つ、ない場合はパス
       if (bestMove !== null) {
         onMoveRef.current(bestMove);
       } else {
         onPassRef.current();
       }
-
-      // CPU思考中フラグを下ろす（手を打った後に下ろす）
-      setIsCpuThinkingRef.current(false);
 
       timerRef.current = null;
     }, 500);
