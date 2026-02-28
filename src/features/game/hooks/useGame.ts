@@ -72,6 +72,32 @@ export function useGame(config: GameConfig | null) {
     [state, gameOver, isCpuThinking]
   );
 
+  // パスを実行
+  const handlePass = useCallback(() => {
+    // ゲーム終了またはCPU思考中は操作不可
+    if (gameOver || isCpuThinking) return;
+
+    const currentPlayer = state.currentPlayer;
+    const opponent = getOpponent(currentPlayer);
+
+    // 相手の合法手をチェック
+    const opponentState = { ...state, currentPlayer: opponent };
+    const opponentMoves = getLegalMoves(opponentState);
+
+    // 相手に合法手がある場合のみパス
+    if (opponentMoves.length > 0) {
+      // 手番を相手に渡す
+      setState({ ...state, currentPlayer: opponent });
+
+      // パス通知を表示
+      if (passTimerRef.current) {
+        clearTimeout(passTimerRef.current);
+      }
+      setPassPlayer(currentPlayer);
+      passTimerRef.current = setTimeout(() => setPassPlayer(null), 1000);
+    }
+  }, [state, gameOver, isCpuThinking]);
+
   // リスタート
   const handleRestart = useCallback(() => {
     // タイマーをクリア
@@ -104,6 +130,7 @@ export function useGame(config: GameConfig | null) {
     setIsCpuThinking,
     passPlayer,
     handleMove,
+    handlePass,
     handleRestart,
     handleBackToMenu,
   };

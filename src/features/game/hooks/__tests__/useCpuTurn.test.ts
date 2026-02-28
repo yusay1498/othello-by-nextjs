@@ -27,10 +27,11 @@ describe("useCpuTurn", () => {
         userColor: "black",
       };
       const onMove = vi.fn();
+      const onPass = vi.fn();
       const setIsCpuThinking = vi.fn();
 
       renderHook(() =>
-        useCpuTurn(state, config, false, onMove, setIsCpuThinking)
+        useCpuTurn(state, config, false, onMove, onPass, setIsCpuThinking)
       );
 
       // PvPモードなのでCPU思考は発動しない
@@ -44,9 +45,10 @@ describe("useCpuTurn", () => {
         currentPlayer: "black",
       };
       const onMove = vi.fn();
+      const onPass = vi.fn();
       const setIsCpuThinking = vi.fn();
 
-      renderHook(() => useCpuTurn(state, null, false, onMove, setIsCpuThinking));
+      renderHook(() => useCpuTurn(state, null, false, onMove, onPass, setIsCpuThinking));
 
       // configがnullなので何もしない
       expect(setIsCpuThinking).not.toHaveBeenCalled();
@@ -63,9 +65,10 @@ describe("useCpuTurn", () => {
         userColor: "black",
       };
       const onMove = vi.fn();
+      const onPass = vi.fn();
       const setIsCpuThinking = vi.fn();
 
-      renderHook(() => useCpuTurn(state, config, true, onMove, setIsCpuThinking));
+      renderHook(() => useCpuTurn(state, config, true, onMove, onPass, setIsCpuThinking));
 
       // ゲーム終了しているので何もしない
       expect(setIsCpuThinking).not.toHaveBeenCalled();
@@ -82,10 +85,11 @@ describe("useCpuTurn", () => {
         userColor: "black",
       };
       const onMove = vi.fn();
+      const onPass = vi.fn();
       const setIsCpuThinking = vi.fn();
 
       renderHook(() =>
-        useCpuTurn(state, config, false, onMove, setIsCpuThinking)
+        useCpuTurn(state, config, false, onMove, onPass, setIsCpuThinking)
       );
 
       // ユーザーの手番なので何もしない
@@ -105,6 +109,7 @@ describe("useCpuTurn", () => {
         userColor: "black",
       };
       const onMove = vi.fn();
+      const onPass = vi.fn();
       const setIsCpuThinking = vi.fn();
 
       // getBestMoveをモック
@@ -112,7 +117,7 @@ describe("useCpuTurn", () => {
       getBestMoveSpy.mockReturnValue(19);
 
       renderHook(() =>
-        useCpuTurn(state, config, false, onMove, setIsCpuThinking)
+        useCpuTurn(state, config, false, onMove, onPass, setIsCpuThinking)
       );
 
       // 即座にCPU思考中フラグが立つ
@@ -142,6 +147,9 @@ describe("useCpuTurn", () => {
       const onMove = vi.fn(() => {
         callOrder.push("onMove");
       });
+      const onPass = vi.fn(() => {
+        callOrder.push("onPass");
+      });
       const setIsCpuThinking = vi.fn((value: boolean) => {
         callOrder.push(`setIsCpuThinking(${value})`);
       });
@@ -150,7 +158,7 @@ describe("useCpuTurn", () => {
       getBestMoveSpy.mockReturnValue(19);
 
       renderHook(() =>
-        useCpuTurn(state, config, false, onMove, setIsCpuThinking)
+        useCpuTurn(state, config, false, onMove, onPass, setIsCpuThinking)
       );
 
       // 500ms経過
@@ -164,7 +172,7 @@ describe("useCpuTurn", () => {
       ]);
     });
 
-    test("合法手がない場合は手を打たない", () => {
+    test("合法手がない場合はパスする", () => {
       const state: GameState = {
         board: createInitialBoard(),
         currentPlayer: "white",
@@ -174,6 +182,7 @@ describe("useCpuTurn", () => {
         userColor: "black",
       };
       const onMove = vi.fn();
+      const onPass = vi.fn();
       const setIsCpuThinking = vi.fn();
 
       // getBestMoveがnullを返す（合法手なし）
@@ -181,7 +190,7 @@ describe("useCpuTurn", () => {
       getBestMoveSpy.mockReturnValue(null);
 
       renderHook(() =>
-        useCpuTurn(state, config, false, onMove, setIsCpuThinking)
+        useCpuTurn(state, config, false, onMove, onPass, setIsCpuThinking)
       );
 
       // CPU思考中フラグは立つ
@@ -190,8 +199,9 @@ describe("useCpuTurn", () => {
       // 500ms経過
       vi.advanceTimersByTime(500);
 
-      // 合法手がないので手は打たない
+      // 合法手がないのでonMoveは呼ばれず、onPassが呼ばれる
       expect(onMove).not.toHaveBeenCalled();
+      expect(onPass).toHaveBeenCalled();
       // フラグは下ろされる
       expect(setIsCpuThinking).toHaveBeenCalledWith(false);
     });
@@ -208,13 +218,14 @@ describe("useCpuTurn", () => {
         userColor: "black",
       };
       const onMove = vi.fn();
+      const onPass = vi.fn();
       const setIsCpuThinking = vi.fn();
 
       const getBestMoveSpy = vi.spyOn(ai, "getBestMove");
       getBestMoveSpy.mockReturnValue(19);
 
       const { unmount } = renderHook(() =>
-        useCpuTurn(state, config, false, onMove, setIsCpuThinking)
+        useCpuTurn(state, config, false, onMove, onPass, setIsCpuThinking)
       );
 
       // CPU思考中フラグが立つ
@@ -241,13 +252,14 @@ describe("useCpuTurn", () => {
         userColor: "black",
       };
       const onMove = vi.fn();
+      const onPass = vi.fn();
       const setIsCpuThinking = vi.fn();
 
       const getBestMoveSpy = vi.spyOn(ai, "getBestMove");
       getBestMoveSpy.mockReturnValue(19);
 
       const { rerender } = renderHook(
-        ({ state }) => useCpuTurn(state, config, false, onMove, setIsCpuThinking),
+        ({ state }) => useCpuTurn(state, config, false, onMove, onPass, setIsCpuThinking),
         {
           initialProps: { state: initialState },
         }
@@ -284,13 +296,14 @@ describe("useCpuTurn", () => {
         userColor: "black",
       };
       const onMove = vi.fn();
+      const onPass = vi.fn();
       const setIsCpuThinking = vi.fn();
 
       const getBestMoveSpy = vi.spyOn(ai, "getBestMove");
       getBestMoveSpy.mockReturnValue(19);
 
       renderHook(() =>
-        useCpuTurn(state, config, false, onMove, setIsCpuThinking)
+        useCpuTurn(state, config, false, onMove, onPass, setIsCpuThinking)
       );
 
       // CPUの手番なので実行される
@@ -310,13 +323,14 @@ describe("useCpuTurn", () => {
         userColor: "white",
       };
       const onMove = vi.fn();
+      const onPass = vi.fn();
       const setIsCpuThinking = vi.fn();
 
       const getBestMoveSpy = vi.spyOn(ai, "getBestMove");
       getBestMoveSpy.mockReturnValue(26);
 
       renderHook(() =>
-        useCpuTurn(state, config, false, onMove, setIsCpuThinking)
+        useCpuTurn(state, config, false, onMove, onPass, setIsCpuThinking)
       );
 
       // CPUの手番なので実行される

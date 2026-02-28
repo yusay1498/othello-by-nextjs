@@ -33,6 +33,8 @@ describe("GameContainer", () => {
       setIsCpuThinking: vi.fn(),
       passPlayer: null,
       handleMove: vi.fn(),
+      handlePass: vi.fn(),
+      handlePass: vi.fn(),
       handleRestart: vi.fn(),
       handleBackToMenu: vi.fn(),
     });
@@ -79,6 +81,7 @@ describe("GameContainer", () => {
         setIsCpuThinking: vi.fn(),
         passPlayer: null,
         handleMove: vi.fn(),
+      handlePass: vi.fn(),
         handleRestart: vi.fn(),
         handleBackToMenu: vi.fn(),
       });
@@ -104,6 +107,7 @@ describe("GameContainer", () => {
         setIsCpuThinking: vi.fn(),
         passPlayer: null,
         handleMove: vi.fn(),
+      handlePass: vi.fn(),
         handleRestart: vi.fn(),
         handleBackToMenu: vi.fn(),
       });
@@ -139,6 +143,7 @@ describe("GameContainer", () => {
         setIsCpuThinking: vi.fn(),
         passPlayer: null,
         handleMove: vi.fn(),
+      handlePass: vi.fn(),
         handleRestart: vi.fn(),
         handleBackToMenu: vi.fn(),
       });
@@ -178,6 +183,7 @@ describe("GameContainer", () => {
         setIsCpuThinking: vi.fn(),
         passPlayer: null,
         handleMove: vi.fn(),
+      handlePass: vi.fn(),
         handleRestart: vi.fn(),
         handleBackToMenu: vi.fn(),
       });
@@ -215,6 +221,7 @@ describe("GameContainer", () => {
         setIsCpuThinking: vi.fn(),
         passPlayer: null,
         handleMove: vi.fn(),
+      handlePass: vi.fn(),
         handleRestart: vi.fn(),
         handleBackToMenu,
       });
@@ -248,6 +255,7 @@ describe("GameContainer", () => {
         setIsCpuThinking: vi.fn(),
         passPlayer: null,
         handleMove: vi.fn(),
+      handlePass: vi.fn(),
         handleRestart: vi.fn(),
         handleBackToMenu: vi.fn(),
       });
@@ -285,6 +293,7 @@ describe("GameContainer", () => {
         setIsCpuThinking: vi.fn(),
         passPlayer: null,
         handleMove: vi.fn(),
+      handlePass: vi.fn(),
         handleRestart: vi.fn(),
         handleBackToMenu,
       });
@@ -312,6 +321,7 @@ describe("GameContainer", () => {
         setIsCpuThinking: vi.fn(),
         passPlayer: null,
         handleMove: vi.fn(),
+      handlePass: vi.fn(),
         handleRestart: vi.fn(),
         handleBackToMenu: vi.fn(),
       });
@@ -335,6 +345,7 @@ describe("GameContainer", () => {
     it("useCpuTurnフックが正しいパラメータで呼ばれる", () => {
       const mockSetIsCpuThinking = vi.fn();
       const mockHandleMove = vi.fn();
+      const mockHandlePass = vi.fn();
 
       mockUseGame.mockReturnValue({
         state: {
@@ -350,6 +361,7 @@ describe("GameContainer", () => {
         setIsCpuThinking: mockSetIsCpuThinking,
         passPlayer: null,
         handleMove: mockHandleMove,
+        handlePass: mockHandlePass,
         handleRestart: vi.fn(),
         handleBackToMenu: vi.fn(),
       });
@@ -361,6 +373,7 @@ describe("GameContainer", () => {
         { mode: "pvc", userColor: "black" },
         false,
         mockHandleMove,
+        mockHandlePass,
         mockSetIsCpuThinking
       );
     });
@@ -389,6 +402,7 @@ describe("GameContainer", () => {
         setIsCpuThinking: vi.fn(),
         passPlayer: null,
         handleMove: vi.fn(),
+      handlePass: vi.fn(),
         handleRestart: vi.fn(),
         handleBackToMenu: vi.fn(),
       });
@@ -425,6 +439,7 @@ describe("GameContainer", () => {
         setIsCpuThinking: vi.fn(),
         passPlayer: "white",
         handleMove: vi.fn(),
+      handlePass: vi.fn(),
         handleRestart: vi.fn(),
         handleBackToMenu: vi.fn(),
       });
@@ -458,6 +473,7 @@ describe("GameContainer", () => {
         setIsCpuThinking: vi.fn(),
         passPlayer: null,
         handleMove: vi.fn(),
+      handlePass: vi.fn(),
         handleRestart: vi.fn(),
         handleBackToMenu: vi.fn(),
       });

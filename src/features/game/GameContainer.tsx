@@ -29,6 +29,7 @@ export function GameContainer() {
     game.config,
     game.isGameOver,
     game.handleMove,
+    game.handlePass,
     game.setIsCpuThinking
   );
 

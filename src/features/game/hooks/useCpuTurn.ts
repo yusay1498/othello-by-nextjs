@@ -9,6 +9,7 @@ import { getBestMove } from "@/domain/game/ai";
  * @param config - ゲーム設定（null の場合は何もしない）
  * @param isGameOver - ゲーム終了フラグ
  * @param onMove - 手を打つ際のコールバック関数
+ * @param onPass - パスする際のコールバック関数
  * @param setIsCpuThinking - CPU思考中フラグの更新関数
  */
 export function useCpuTurn(
@@ -16,16 +17,19 @@ export function useCpuTurn(
   config: GameConfig | null,
   isGameOver: boolean,
   onMove: (index: Position) => void,
+  onPass: () => void,
   setIsCpuThinking: (thinking: boolean) => void
 ) {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
-  // onMoveとsetIsCpuThinkingの最新値をrefで保持（effectの再実行を防ぐ）
+  // onMove、onPass、setIsCpuThinkingの最新値をrefで保持（effectの再実行を防ぐ）
   const onMoveRef = useRef(onMove);
+  const onPassRef = useRef(onPass);
   const setIsCpuThinkingRef = useRef(setIsCpuThinking);
 
   // 常に最新の値でrefを更新
   useEffect(() => {
     onMoveRef.current = onMove;
+    onPassRef.current = onPass;
     setIsCpuThinkingRef.current = setIsCpuThinking;
   });
 
@@ -65,9 +69,11 @@ export function useCpuTurn(
       // CPU思考中フラグを下ろす（手を打つ前に下ろす）
       setIsCpuThinkingRef.current(false);
 
-      // 合法手がある場合のみ手を打つ
+      // 合法手がある場合は手を打つ、ない場合はパス
       if (bestMove !== null) {
         onMoveRef.current(bestMove);
+      } else {
+        onPassRef.current();
       }
 
       timerRef.current = null;
