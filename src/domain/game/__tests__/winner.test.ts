@@ -1,8 +1,8 @@
-import { describe, expect, test } from "vitest";
-import { createInitialBoard } from "../board";
-import { getGameResult } from "../winner";
-import { TOTAL_CELLS } from "../constants";
-import type { Board } from "../types";
+import { describe, expect, test } from 'vitest';
+import { createInitialBoard } from '../board';
+import { getGameResult } from '../winner';
+import { TOTAL_CELLS } from '../constants';
+import type { Board } from '../types';
 
 describe("getGameResult", () => {
   describe("ゲーム進行中", () => {

@@ -1,34 +1,34 @@
-import { describe, expect, test } from "vitest";
-import { createInitialBoard, getScore } from "../board";
-import { applyMove, getLegalMoves, isGameOver } from "../rules";
-import { TOTAL_CELLS } from "../constants";
-import type { Board, GameState } from "../types";
+import { describe, expect, test } from 'vitest';
+import { createInitialBoard, getScore } from '../board';
+import { applyMove, getLegalMoves, isGameOver } from '../rules';
+import { TOTAL_CELLS } from '../constants';
+import type { Board, GameState } from '../types';
 
 describe("getLegalMoves", () => {
-  test("初期盤面の黒の合法手は4つ", () => {
+  test('初期盤面の黒の合法手は4つ', () => {
     const state: GameState = {
       board: createInitialBoard(),
-      currentPlayer: "black",
+      currentPlayer: 'black',
     };
     const moves = getLegalMoves(state);
     expect(moves).toHaveLength(4);
-    expect(moves).toContain(19); // c4
-    expect(moves).toContain(26); // d3
-    expect(moves).toContain(37); // e6
-    expect(moves).toContain(44); // f5
+    expect(moves).toContain(19); // d3
+    expect(moves).toContain(26); // c4
+    expect(moves).toContain(37); // f5
+    expect(moves).toContain(44); // e6
   });
 
-  test("初期盤面の白の合法手は4つ", () => {
+  test('初期盤面の白の合法手は4つ', () => {
     const state: GameState = {
       board: createInitialBoard(),
-      currentPlayer: "white",
+      currentPlayer: 'white',
     };
     const moves = getLegalMoves(state);
     expect(moves).toHaveLength(4);
-    expect(moves).toContain(20); // c5
-    expect(moves).toContain(29); // d6
-    expect(moves).toContain(34); // e3
-    expect(moves).toContain(43); // f4
+    expect(moves).toContain(20); // e3
+    expect(moves).toContain(29); // f4
+    expect(moves).toContain(34); // c5
+    expect(moves).toContain(43); // d6
   });
 
   test("合法手がない場合は空配列", () => {
@@ -90,7 +90,7 @@ describe("applyMove", () => {
       currentPlayer: "black",
     };
 
-    const newState = applyMove(state, 64); // 範囲外
+    const newState = applyMove(state, TOTAL_CELLS); // 範囲外（最大インデックス+1）
     expect(newState).toBe(state);
   });
 
@@ -162,32 +162,56 @@ describe("isGameOver", () => {
     expect(isGameOver(state)).toBe(false);
   });
 
-  test("現在のプレイヤーが置けない場合でも相手が置ける場合は継続", () => {
-    const board: Board = createInitialBoard();
-    // 黒が置けない状況を作る（実際には初期盤面では両方置ける）
-    const state: GameState = { board, currentPlayer: "black" };
+  test('現在のプレイヤーが置けない場合でも相手が置ける場合は継続', () => {
+    const board: Board = new Array(TOTAL_CELLS).fill(null);
+    // 0: 黒石, 1: 白石, それ以外は空き
+    // このとき白（現在プレイヤー）はどこにも合法手がなく、黒は2に合法手を持つ
+    board[0] = 'black';
+    board[1] = 'white';
+
+    const state: GameState = { board, currentPlayer: 'white' };
     expect(isGameOver(state)).toBe(false);
   });
 });
 
-describe("境界値テスト", () => {
-  test("左端から左への移動", () => {
+describe('境界値テスト', () => {
+  test('左端から左への移動で行ラップしない', () => {
     const board: Board = new Array(TOTAL_CELLS).fill(null);
-    board[0] = "white"; // 左端
-    board[1] = "black";
-    const state: GameState = { board, currentPlayer: "white" };
+    // 行ラップが起きると誤って 8 が合法手になるような配置:
+    //  6: 自分の石, 7: 相手の石, 8: 空 (見かけ上は「左端」)
+    board[6] = 'white';
+    board[7] = 'black';
+    // 8 が合法手として返ってこないことを確認する
+    const state: GameState = { board, currentPlayer: 'white' };
     const moves = getLegalMoves(state);
-    // 左端からは左に行けない
-    expect(moves).not.toContain(-1);
+    expect(moves).not.toContain(8);
   });
 
-  test("右端から右への移動", () => {
+  test('右端から右への移動で行ラップしない', () => {
     const board: Board = new Array(TOTAL_CELLS).fill(null);
-    board[7] = "white"; // 右端
-    board[6] = "black";
-    const state: GameState = { board, currentPlayer: "white" };
+    // 行ラップ（col7 → 次行 col0）を誤って許す実装だと、
+    // index 8 が合法手と判定されてしまうような盤面を作る
+    //
+    // 0 行目:  ... B W  (index 6: black, 7: white)
+    // 1 行目:  ... ?    (index 8: null)
+    // 正しい実装では 8 は合法手ではない（行をまたいで挟み込みできない）ため、
+    // moves に 8 が含まれないことを検証する。
+    board[6] = 'black';
+    board[7] = 'white'; // 右端
+    board[8] = null; // 次の行の左端
+
+    // さらに通常の合法手が存在するよう、別の場所に挟み込み可能な配置を作る
+    // 2 行目: index 16: black, 17: white, 18: null → 18 は黒の合法手
+    board[16] = 'black';
+    board[17] = 'white';
+    board[18] = null;
+
+    const state: GameState = { board, currentPlayer: 'black' };
     const moves = getLegalMoves(state);
-    // 右端からは右に行けない
+
+    // 合法手が存在することを確認（テストが常に真にならないようにする）
+    expect(moves.length).toBeGreaterThan(0);
+    // 右端から次の行への行ラップは許されないので、index 8 は合法手に含まれない
     expect(moves).not.toContain(8);
   });
 
