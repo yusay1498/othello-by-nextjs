@@ -4,43 +4,30 @@
 
 ## Format Rules
 
-- Use conventional commit format: `type(scope): message`
-- Write the message in Japanese (日本語でメッセージを記述)
-- Keep the subject line concise (50-72 characters recommended)
-- Use imperative mood in the type prefix
-
-## Commit Types
-
-- `feat`: 新機能の追加
-- `fix`: バグ修正
-- `docs`: ドキュメントの変更
-- `style`: コードスタイルの変更（フォーマット、セミコロンなど）
-- `refactor`: リファクタリング（機能追加やバグ修正を含まない）
-- `test`: テストの追加・修正
-- `chore`: ビルドプロセスやツールの設定変更
-
-## Scope Guidelines
-
-- Use the main directory or feature name as scope
-- Examples: `game`, `ui`, `logic`, `board`, `rules`, `config`
+- Write in English with the first letter capitalized
+- Do NOT use prefixes like feat:, fix:, docs:, etc.
+- Describe the change concisely in one sentence
+- Avoid periods, commas, and conjunctions
+- Keep the message under 50 characters
 
 ## Message Guidelines
 
-- メッセージは日本語で記述する
-- 変更内容を簡潔に説明する
-- 「〜を実装」「〜を修正」「〜を追加」などの表現を使用
+- Start with a capital letter
+- Use imperative mood (Add, Fix, Update, Remove, etc.)
+- Be specific about what changed
+- One sentence only
 
 ## Examples
 
-良い例:
-- `feat(game): オセロボードの初期配置を実装`
-- `fix(ui): モバイル表示時のレイアウト崩れを修正`
-- `refactor(logic): 駒の裏返し処理を最適化`
-- `docs(readme): インストール手順を更新`
-- `test(rules): 合法手判定のテストケースを追加`
-- `chore(config): ESLint設定を更新`
+Good examples:
+- `Add initial board layout for Othello`
+- `Fix mobile layout issue`
+- `Update ESLint configuration`
+- `Remove unused imports`
+- `Refactor flip logic for better performance`
 
-悪い例:
-- `Add move validation logic` (英語、プレフィックスなし)
-- `feat(game): Add move validation logic` (英語)
-- `オセロボードの初期配置を実装` (プレフィックスなし)
+Bad examples:
+- `feat(game): Add initial board layout` ❌ (has prefix)
+- `add initial board layout` ❌ (lowercase first letter)
+- `Added initial board layout.` ❌ (past tense, has period)
+- `Add initial board layout, update styles, and fix bugs` ❌ (too long, has commas and conjunctions)

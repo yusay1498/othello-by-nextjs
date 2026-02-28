@@ -11,7 +11,7 @@
 3. コミットメッセージ入力欄の横にある **✨（Sparkle）ボタン** をクリック
 4. Copilotが自動的にコミットメッセージを生成します
 
-> **Note**: このプロジェクトでは `.vscode/settings.json` に `github.copilot.chat.commitMessageGeneration.instructions` を設定しているため、Copilotはプロジェクトのコミット規約（`type(scope): 日本語メッセージ`）に従ったメッセージを生成します。
+> **Note**: このプロジェクトでは `.vscode/settings.json` に `github.copilot.chat.commitMessageGeneration.instructions` を設定しているため、Copilotはプロジェクトのコミット規約（先頭大文字の英語、50文字以内、プレフィックスなし）に従ったメッセージを生成します。
 
 ### 代替方法: Git Hookを使用
 
@@ -102,7 +102,7 @@ git commit
 
 2. 以下のようなプロンプトを入力:
 ```
-現在のステージされた変更に対して、日本語でtype(scope): メッセージの形式でコミットメッセージを生成してください。
+Generate a commit message for the staged changes. Use English with first letter capitalized, no prefix, under 50 characters.
 ```
 
 3. 生成されたメッセージをコピーして使用
@@ -113,27 +113,28 @@ git commit
 
 ### 形式
 
-**日本語での従来のコミット形式:**
-- 日本語で記述してください
-- `type(scope): メッセージ` の形式を使用
-- タイプ: feat（機能追加）, fix（バグ修正）, docs（ドキュメント）, style（スタイル）, refactor（リファクタリング）, test（テスト）, chore（雑務）
-- メッセージは明確で簡潔に保ってください
+- 先頭大文字の英語で記述
+- プレフィックス（feat:, fix: など）は不要
+- 変更内容を簡潔に記述
+- ピリオド、カンマ、接続詞はできるだけ避ける
+- 1文でかつ50文字以内に収める
 
 ### 例
 
 ```
-feat(game): オセロボードの初期配置を実装
-fix(ui): モバイル表示時のレイアウト崩れを修正
-refactor(logic): 駒の裏返し処理を最適化
-docs(readme): インストール手順を更新
-test(rules): 合法手判定のテストケースを追加
+Add initial board layout for Othello
+Fix mobile layout issue
+Update ESLint configuration
+Remove unused imports
+Refactor flip logic for better performance
 ```
 
 **悪い例 / Bad examples:**
 ```
-Add move validation logic  ❌ (英語で記述されている・プレフィックスがない)
-feat(game): Add move validation logic  ❌ (英語で記述されている)
-オセロボードの初期配置を実装  ❌ (type(scope)プレフィックスがない)
+feat(game): Add initial board layout  ❌ (プレフィックスがある)
+add initial board layout  ❌ (先頭が小文字)
+Added initial board layout.  ❌ (過去形、ピリオドがある)
+Add board, fix styles, update config  ❌ (複数の変更、カンマがある)
 ```
 
 ## トラブルシューティング
@@ -249,7 +250,7 @@ git commit
 
 2. Enter a prompt like:
 ```
-Generate a commit message for the currently staged changes in Japanese using the format: type(scope): メッセージ.
+Generate a commit message for the staged changes. Use English with first letter capitalized, no prefix, under 50 characters.
 ```
 
 3. Copy and use the generated message
@@ -260,27 +261,28 @@ This project uses the following format:
 
 ### Format
 
-**Japanese Conventional Commit Format:**
-- Write in Japanese (日本語)
-- Use format: `type(scope): メッセージ`
-- Types: feat（機能追加）, fix（バグ修正）, docs（ドキュメント）, style（スタイル）, refactor（リファクタリング）, test（テスト）, chore（雑務）
-- Keep messages clear and concise
+- Write in English with first letter capitalized
+- Do NOT use prefixes like feat:, fix:, docs:, etc.
+- Describe the change concisely
+- Avoid periods, commas, and conjunctions
+- Keep under 50 characters in one sentence
 
 ### Examples
 
 ```
-feat(game): オセロボードの初期配置を実装
-fix(ui): モバイル表示時のレイアウト崩れを修正
-refactor(logic): 駒の裏返し処理を最適化
-docs(readme): インストール手順を更新
-test(rules): 合法手判定のテストケースを追加
+Add initial board layout for Othello
+Fix mobile layout issue
+Update ESLint configuration
+Remove unused imports
+Refactor flip logic for better performance
 ```
 
 **Bad examples:**
 ```
-Add move validation logic  ❌ (written in English, no prefix)
-feat(game): Add move validation logic  ❌ (written in English)
-オセロボードの初期配置を実装  ❌ (no type(scope) prefix)
+feat(game): Add initial board layout  ❌ (has prefix)
+add initial board layout  ❌ (lowercase first letter)
+Added initial board layout.  ❌ (past tense, has period)
+Add board, fix styles, update config  ❌ (too long, has commas)
 ```
 
 ## Troubleshooting
