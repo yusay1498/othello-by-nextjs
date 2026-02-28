@@ -1,3 +1,5 @@
+"use client";
+
 import type { WinnerResult } from "@/domain/game/types";
 
 interface GameResultProps {
@@ -27,12 +29,13 @@ export function GameResult({
     switch (result.type) {
       case "draw":
         return `引き分け (${score.black}-${score.white})`;
-      case "win":
+      case "win": {
         const winnerText = result.winner === "black" ? "黒" : "白";
         if (result.perfect) {
           return `${winnerText}のパーフェクト勝利！`;
         }
         return `${winnerText}の勝ち！`;
+      }
     }
   };
 
