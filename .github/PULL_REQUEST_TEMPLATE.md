@@ -1,51 +1,73 @@
-## Description
-<!-- Provide a brief description of your changes -->
+Motivation
+----------------------------------------
 
-## Type of Change
-<!-- Mark the relevant option with an "x" -->
+<!--
+動機：
+このPRが必要になった背景情報などを説明してください
+-->
 
-- [ ] Bug fix (non-breaking change which fixes an issue)
-- [ ] New feature (non-breaking change which adds functionality)
-- [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
-- [ ] Documentation update
-- [ ] Code refactoring
-- [ ] Performance improvement
-- [ ] Test addition/update
 
-## Related Issue
-<!-- Link to the issue this PR addresses -->
-Closes #(issue number)
+Proposed changes
+----------------------------------------
 
-## Changes Made
-<!-- List the main changes made in this PR -->
+<!--
+提案された変更：
+このPRに含まれる変更概要と実現手段を説明してください
+-->
 
--
--
--
 
-## Testing
-<!-- Describe the tests you ran to verify your changes -->
+Rejected alternatives
+----------------------------------------
 
-- [ ] Tested locally
-- [ ] All existing tests pass
-- [ ] Added new tests for new functionality
-- [ ] Tested in multiple browsers (if UI change)
-- [ ] Tested responsive design (if UI change)
+<!--
+拒否された代替案：
+このPRでは採用しなかった実現手段とその不採用理由を挙げてください
+他に代替手段がないくらい内容が単純な場合は省略しても良いです
+-->
 
-## Screenshots
-<!-- If applicable, add screenshots to demonstrate the changes -->
+### A.
 
-## Checklist
-<!-- Mark completed items with an "x" -->
 
-- [ ] My code follows the project's code style guidelines
-- [ ] I have performed a self-review of my own code
-- [ ] I have commented my code, particularly in hard-to-understand areas
-- [ ] I have made corresponding changes to the documentation
-- [ ] My changes generate no new warnings
-- [ ] I have added tests that prove my fix is effective or that my feature works
-- [ ] New and existing unit tests pass locally with my changes
-- [ ] Any dependent changes have been merged and published
+### B.
 
-## Additional Notes
-<!-- Add any additional notes or context about the PR here -->
+
+Appendix
+----------------------------------------
+
+### Issues
+
+<!--
+関連課題:
+リンクを挙げてください
+-->
+
+- https://
+
+### References
+
+<!--
+参考文献:
+リンクを挙げてください
+-->
+
+- https://
+
+### Checklist
+
+<!--
+以下、チェックリストを確認したら、[ ] を [x] に変更してください
+またセルフレビューに要した時間も記載してください。
+
+チェックリスト:
+- [ ] セルフレビューが済んでいる
+    - セルフレビューにかかった時間は次の通り
+    - (  ) 分
+- [ ] ローカルコンテナでテスト済み
+- [ ] コミットログの整理が済んでいる
+-->
+
+- [ ] Self reviewed
+    - Time spent on self-review is as follows
+    - (  ) min
+- [ ] Tested by local containers
+- [ ] Organized commit logs
