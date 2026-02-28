@@ -9,6 +9,8 @@ describe("useGame", () => {
   });
 
   afterEach(() => {
+    vi.clearAllTimers();
+    vi.useRealTimers();
     vi.restoreAllMocks();
   });
 
@@ -90,7 +92,7 @@ describe("useGame", () => {
       expect(result.current.state).toBe(prevState);
     });
 
-    test("ゲーム終了後は手を打てない", () => {
+    test("操作がブロックされている場合は手を打てない", () => {
       const config: GameConfig = {
         mode: "pvp",
         userColor: "black",
@@ -98,28 +100,7 @@ describe("useGame", () => {
 
       const { result } = renderHook(() => useGame(config));
 
-      // ゲームを終了状態にする（モックで代用）
-      // 実際のゲーム終了状態を作るのは複雑なので、
-      // ここでは基本的な動作確認のみ
-      const initialPlayer = result.current.state.currentPlayer;
-
-      act(() => {
-        result.current.handleMove(19);
-      });
-
-      // 手番が変わることを確認
-      expect(result.current.state.currentPlayer).not.toBe(initialPlayer);
-    });
-
-    test("CPU思考中は手を打てない", () => {
-      const config: GameConfig = {
-        mode: "pvc",
-        userColor: "black",
-      };
-
-      const { result } = renderHook(() => useGame(config));
-
-      // CPU思考中に設定
+      // CPU思考中フラグを使って操作をブロックする
       act(() => {
         result.current.setIsCpuThinking(true);
       });
@@ -131,11 +112,12 @@ describe("useGame", () => {
         result.current.handleMove(19);
       });
 
-      // 状態が変わらない
+      // ブロックされているので状態が変わらない
       expect(result.current.state).toBe(prevState);
+      expect(result.current.isCpuThinking).toBe(true);
     });
 
-    test("パスが発生したときにpassPlayerが設定される", () => {
+    test("通常の手ではパスは発生しない", () => {
       const config: GameConfig = {
         mode: "pvp",
         userColor: "black",
@@ -143,14 +125,15 @@ describe("useGame", () => {
 
       const { result } = renderHook(() => useGame(config));
 
-      // パスが発生する状態を作るのは複雑なので、
-      // ここでは基本的な手を打つケースのみテスト
+      // 通常の手を打つ（パスは発生しない）
       act(() => {
         result.current.handleMove(19);
       });
 
       // 通常の手ではパスは発生しない
       expect(result.current.passPlayer).toBeNull();
+      // 手番は正常に交代する
+      expect(result.current.state.currentPlayer).toBe("white");
     });
   });
 

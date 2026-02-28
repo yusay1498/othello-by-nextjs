@@ -1,10 +1,9 @@
-import { useState, useMemo, useCallback } from "react";
+import { useState, useMemo, useCallback, useRef, useEffect } from "react";
 import type {
   GameConfig,
   GameState,
   Player,
   Position,
-  WinnerResult,
 } from "@/domain/game/types";
 import { createInitialBoard, getScore, getOpponent } from "@/domain/game/board";
 import { getLegalMoves, applyMove, isGameOver } from "@/domain/game/rules";
@@ -25,6 +24,16 @@ export function useGame(config: GameConfig | null) {
 
   const [isCpuThinking, setIsCpuThinking] = useState(false);
   const [passPlayer, setPassPlayer] = useState<Player | null>(null);
+  const passTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  // クリーンアップ: アンマウント時にタイマーをクリア
+  useEffect(() => {
+    return () => {
+      if (passTimerRef.current) {
+        clearTimeout(passTimerRef.current);
+      }
+    };
+  }, []);
 
   // 導出値 - useMemoで最適化
   const legalMoves = useMemo(() => getLegalMoves(state), [state]);
@@ -52,8 +61,12 @@ export function useGame(config: GameConfig | null) {
       // パス判定: 手番が変わらなかった場合は相手がパス
       if (newState.currentPlayer === prevState.currentPlayer) {
         const opponent = getOpponent(prevState.currentPlayer);
+        // 既存のタイマーをクリア
+        if (passTimerRef.current) {
+          clearTimeout(passTimerRef.current);
+        }
         setPassPlayer(opponent);
-        setTimeout(() => setPassPlayer(null), 1000);
+        passTimerRef.current = setTimeout(() => setPassPlayer(null), 1000);
       }
     },
     [state, gameOver, isCpuThinking]
@@ -61,6 +74,11 @@ export function useGame(config: GameConfig | null) {
 
   // リスタート
   const handleRestart = useCallback(() => {
+    // タイマーをクリア
+    if (passTimerRef.current) {
+      clearTimeout(passTimerRef.current);
+      passTimerRef.current = null;
+    }
     setState({
       board: createInitialBoard(),
       currentPlayer: "black",
