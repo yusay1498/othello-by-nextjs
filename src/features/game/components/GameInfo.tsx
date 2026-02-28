@@ -18,6 +18,7 @@ export function GameInfo({
   return (
     <div
       className="flex flex-col gap-4 w-full max-w-xl p-4 bg-white rounded-lg shadow-md"
+      role="region"
       aria-label="ゲーム情報"
     >
       {/* 手番表示 */}
@@ -39,22 +40,24 @@ export function GameInfo({
 
       {/* スコア表示 */}
       <div className="flex justify-around gap-4">
-        <div className="flex flex-col items-center gap-1">
+        <div
+          className="flex flex-col items-center gap-1"
+          role="group"
+          aria-label={`黒のスコア: ${score.black}`}
+        >
           <span className="text-gray-900 font-semibold">⚫ 黒</span>
-          <span
-            className="text-3xl font-bold text-gray-900"
-            aria-label={`黒のスコア: ${score.black}`}
-          >
+          <span className="text-3xl font-bold text-gray-900">
             {score.black}
           </span>
         </div>
         <div className="flex items-center text-2xl text-gray-400">-</div>
-        <div className="flex flex-col items-center gap-1">
+        <div
+          className="flex flex-col items-center gap-1"
+          role="group"
+          aria-label={`白のスコア: ${score.white}`}
+        >
           <span className="text-gray-500 font-semibold">⚪ 白</span>
-          <span
-            className="text-3xl font-bold text-gray-500"
-            aria-label={`白のスコア: ${score.white}`}
-          >
+          <span className="text-3xl font-bold text-gray-500">
             {score.white}
           </span>
         </div>
