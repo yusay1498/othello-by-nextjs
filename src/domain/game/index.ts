@@ -9,6 +9,16 @@ export type {
 } from './types';
 
 // 定数のエクスポート
+export {
+  BOARD_SIZE,
+  TOTAL_CELLS,
+  DIRECTIONS,
+  CORNERS,
+  POSITION_WEIGHTS,
+} from './constants';
+
+// ボード関数のエクスポート
+export { createInitialBoard, getScore, getOpponent } from './board';
 export { BOARD_SIZE, TOTAL_CELLS } from './constants';
 
 // ボード関数のエクスポート
