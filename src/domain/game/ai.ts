@@ -39,8 +39,8 @@ function minimax(
   beta: number,
   aiPlayer: Player
 ): number {
-  // 深さ0以下または終局なら評価値を返す
-  if (depth <= 0) {
+  // 深さ0または終局なら評価値を返す
+  if (depth === 0) {
     return evaluateBoard(state.board, aiPlayer);
   }
 
