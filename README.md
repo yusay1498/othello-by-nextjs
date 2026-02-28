@@ -105,6 +105,19 @@ pnpm dev
 
 GitHub Copilotを使用してコミットメッセージを自動生成できます。詳しくは[Copilotコミットガイド](.github/COPILOT_COMMIT_GUIDE.md)をご覧ください。
 
+### PR作成ツール
+
+ドメイン層の実装を複数のPRに分割するためのツールとドキュメントが用意されています：
+
+- **[PR_CREATION_READY.md](PR_CREATION_READY.md)** - PR作成の準備状況と手順の概要
+- **[PR_CREATION_GUIDE.md](PR_CREATION_GUIDE.md)** - 詳細なPR作成マニュアル
+- **[PR_LINKS.md](PR_LINKS.md)** - PR作成用ダイレクトリンク集
+- **[create-prs.sh](create-prs.sh)** - 自動PR作成スクリプト
+- **[PR_SPLIT_PLAN.md](PR_SPLIT_PLAN.md)** - PR分割の背景と戦略
+- **[BRANCH_SUMMARY.md](BRANCH_SUMMARY.md)** - 各ブランチの詳細情報
+
+詳細は[PR_CREATION_READY.md](PR_CREATION_READY.md)を参照してください。
+
 ## 📄 ライセンス
 
 このプロジェクトはMITライセンスの下でライセンスされています。詳細は[LICENSE](LICENSE)ファイルを参照してください。
