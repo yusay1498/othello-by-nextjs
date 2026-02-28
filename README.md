@@ -81,7 +81,6 @@ pnpm dev
 - **[Hooks](docs/hooks/README.md)** - 状態管理用カスタムフック
 - **[アーキテクチャ](docs/architecture/README.md)** - システムアーキテクチャ
 - **[テスト戦略](docs/testing/README.md)** - テスト戦略と例
-- **[APIリファレンス](docs/api/README.md)** - 完全なAPIドキュメント
 
 ## 🤝 コントリビューション
 

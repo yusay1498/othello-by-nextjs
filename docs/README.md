@@ -103,14 +103,6 @@
   - 統合テスト
   - CI/CD統合
 
-### 📖 API リファレンス
-
-- **[api/README.md](api/README.md)** - 完全なAPIリファレンス
-  - 全型定義のリスト
-  - 全関数のシグネチャ
-  - 全コンポーネントのProps
-  - 使用例
-
 ---
 
 ## 📚 ドキュメントの読み方
@@ -131,7 +123,7 @@
 
 1. **[components/README.md](components/README.md)** - コンポーネント設計を確認
 2. **[hooks/README.md](hooks/README.md)** - 状態管理を理解
-3. **[api/README.md](api/README.md)** - APIリファレンス参照
+3. **[domain/types.md](domain/types.md)** - 型定義を参照
 
 ---
 
@@ -247,10 +239,7 @@ othello-by-nextjs/
     ├── architecture/             # アーキテクチャ
     │   └── README.md
     │
-    ├── testing/                  # テスト戦略
-    │   └── README.md
-    │
-    └── api/                      # APIリファレンス
+    └── testing/                  # テスト戦略
         └── README.md
 ```
 
