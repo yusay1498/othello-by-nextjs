@@ -4,10 +4,10 @@ export type {
   Cell,
   Board,
   Position,
-} from "./types";
+} from './types';
 
 // Constant exports
-export { BOARD_SIZE, TOTAL_CELLS } from "./constants";
+export { BOARD_SIZE, TOTAL_CELLS } from './constants';
 
 // Board function exports
-export { createInitialBoard, getScore, getOpponent } from "./board";
+export { createInitialBoard, getScore, getOpponent } from './board';
