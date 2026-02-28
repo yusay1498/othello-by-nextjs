@@ -71,8 +71,11 @@
 ## PRタイトルとディスクリプション
 - **PRタイトルは英語で記述してください**
   - 簡潔で分かりやすいタイトルにしてください
+  - **具体的で説明的なタイトルを使用してください**（"Addressing PR comments"のような汎用的なタイトルは避けてください）
+  - PRの実際の変更内容を反映したタイトルにしてください
   - 例: `Add Japanese language configuration for Claude Code`
   - 例: `Fix TypeScript usage guidelines to be more flexible`
+  - 例: `Update PR title format to use English`
 - **PRディスクリプションは日本語で記述してください**
 - 以下のセクションを含めてください:
   - **動機**: この変更が必要になった背景
