@@ -1,10 +1,11 @@
 import { memo } from "react";
-import type { Cell as CellType } from "@/domain/game/types";
+import type { Cell as CellType, Position } from "@/domain/game/types";
 
 interface CellProps {
+  index: Position;
   value: CellType;
   isLegal: boolean;
-  onClick: () => void;
+  onCellClick: (index: Position) => void;
   disabled: boolean;
 }
 
@@ -12,11 +13,11 @@ interface CellProps {
  * オセロの1マスを表示するコンポーネント
  * パフォーマンス最適化のためReact.memoでメモ化
  */
-export const Cell = memo(function Cell({ value, isLegal, onClick, disabled }: CellProps) {
+export const Cell = memo(function Cell({ index, value, isLegal, onCellClick, disabled }: CellProps) {
   return (
     <button
       type="button"
-      onClick={onClick}
+      onClick={() => onCellClick(index)}
       disabled={disabled || !isLegal}
       className={`
         w-full aspect-square

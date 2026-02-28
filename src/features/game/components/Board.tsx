@@ -25,9 +25,10 @@ export function Board({ board, legalMoves, onCellClick, disabled }: BoardProps) 
       {board.map((cell, index) => (
         <Cell
           key={index}
+          index={index}
           value={cell}
           isLegal={legalMovesSet.has(index)}
-          onClick={() => onCellClick(index)}
+          onCellClick={onCellClick}
           disabled={disabled}
         />
       ))}

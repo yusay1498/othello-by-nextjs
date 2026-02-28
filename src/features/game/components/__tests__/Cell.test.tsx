@@ -6,7 +6,7 @@ import { Cell } from "../Cell";
 describe("Cell", () => {
   it("空のマスを表示する", () => {
     render(
-      <Cell value={null} isLegal={false} onClick={vi.fn()} disabled={false} />
+      <Cell index={0} value={null} isLegal={false} onCellClick={vi.fn()} disabled={false} />
     );
 
     expect(screen.getByRole("button")).toBeInTheDocument();
@@ -14,7 +14,7 @@ describe("Cell", () => {
 
   it("黒石を表示する", () => {
     render(
-      <Cell value="black" isLegal={false} onClick={vi.fn()} disabled={false} />
+      <Cell index={0} value="black" isLegal={false} onCellClick={vi.fn()} disabled={false} />
     );
 
     const button = screen.getByLabelText("黒石");
@@ -23,7 +23,7 @@ describe("Cell", () => {
 
   it("白石を表示する", () => {
     render(
-      <Cell value="white" isLegal={false} onClick={vi.fn()} disabled={false} />
+      <Cell index={0} value="white" isLegal={false} onCellClick={vi.fn()} disabled={false} />
     );
 
     const button = screen.getByLabelText("白石");
@@ -32,7 +32,7 @@ describe("Cell", () => {
 
   it("合法手を表示する", () => {
     render(
-      <Cell value={null} isLegal={true} onClick={vi.fn()} disabled={false} />
+      <Cell index={0} value={null} isLegal={true} onCellClick={vi.fn()} disabled={false} />
     );
 
     const button = screen.getByLabelText("合法手");
@@ -40,18 +40,19 @@ describe("Cell", () => {
     expect(button).not.toBeDisabled();
   });
 
-  it("合法手をクリックするとonClickが呼ばれる", async () => {
+  it("合法手をクリックするとonCellClickが呼ばれる", async () => {
     const user = userEvent.setup();
     const handleClick = vi.fn();
 
     render(
-      <Cell value={null} isLegal={true} onClick={handleClick} disabled={false} />
+      <Cell index={5} value={null} isLegal={true} onCellClick={handleClick} disabled={false} />
     );
 
     const button = screen.getByRole("button");
     await user.click(button);
 
     expect(handleClick).toHaveBeenCalledTimes(1);
+    expect(handleClick).toHaveBeenCalledWith(5);
   });
 
   it("無効化されたセルはクリックできない", async () => {
@@ -59,7 +60,7 @@ describe("Cell", () => {
     const handleClick = vi.fn();
 
     render(
-      <Cell value={null} isLegal={true} onClick={handleClick} disabled={true} />
+      <Cell index={0} value={null} isLegal={true} onCellClick={handleClick} disabled={true} />
     );
 
     const button = screen.getByRole("button");
@@ -73,7 +74,7 @@ describe("Cell", () => {
     const handleClick = vi.fn();
 
     render(
-      <Cell value={null} isLegal={false} onClick={handleClick} disabled={false} />
+      <Cell index={0} value={null} isLegal={false} onCellClick={handleClick} disabled={false} />
     );
 
     const button = screen.getByRole("button");
