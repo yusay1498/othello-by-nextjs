@@ -129,6 +129,41 @@ describe("useCpuTurn", () => {
       expect(setIsCpuThinking).toHaveBeenCalledWith(false);
     });
 
+    test("手を打つ前にCPU思考中フラグが下ろされる", () => {
+      const state: GameState = {
+        board: createInitialBoard(),
+        currentPlayer: "white",
+      };
+      const config: GameConfig = {
+        mode: "pvc",
+        userColor: "black",
+      };
+      const callOrder: string[] = [];
+      const onMove = vi.fn(() => {
+        callOrder.push("onMove");
+      });
+      const setIsCpuThinking = vi.fn((value: boolean) => {
+        callOrder.push(`setIsCpuThinking(${value})`);
+      });
+
+      const getBestMoveSpy = vi.spyOn(ai, "getBestMove");
+      getBestMoveSpy.mockReturnValue(19);
+
+      renderHook(() =>
+        useCpuTurn(state, config, false, onMove, setIsCpuThinking)
+      );
+
+      // 500ms経過
+      vi.advanceTimersByTime(500);
+
+      // setIsCpuThinking(false)がonMoveの前に呼ばれることを確認
+      expect(callOrder).toEqual([
+        "setIsCpuThinking(true)",
+        "setIsCpuThinking(false)",
+        "onMove",
+      ]);
+    });
+
     test("合法手がない場合は手を打たない", () => {
       const state: GameState = {
         board: createInitialBoard(),

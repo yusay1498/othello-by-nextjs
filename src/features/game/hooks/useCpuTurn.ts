@@ -19,6 +19,15 @@ export function useCpuTurn(
   setIsCpuThinking: (thinking: boolean) => void
 ) {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  // onMoveとsetIsCpuThinkingの最新値をrefで保持（effectの再実行を防ぐ）
+  const onMoveRef = useRef(onMove);
+  const setIsCpuThinkingRef = useRef(setIsCpuThinking);
+
+  // 常に最新の値でrefを更新
+  useEffect(() => {
+    onMoveRef.current = onMove;
+    setIsCpuThinkingRef.current = setIsCpuThinking;
+  });
 
   useEffect(() => {
     // クリーンアップ関数
@@ -47,19 +56,20 @@ export function useCpuTurn(
     }
 
     // CPU思考中フラグを立てる
-    setIsCpuThinking(true);
+    setIsCpuThinkingRef.current(true);
 
     // 500ms後にCPUの手を実行
     timerRef.current = setTimeout(() => {
       const bestMove = getBestMove(state);
 
+      // CPU思考中フラグを下ろす（手を打つ前に下ろす）
+      setIsCpuThinkingRef.current(false);
+
       // 合法手がある場合のみ手を打つ
       if (bestMove !== null) {
-        onMove(bestMove);
+        onMoveRef.current(bestMove);
       }
 
-      // CPU思考中フラグを下ろす
-      setIsCpuThinking(false);
       timerRef.current = null;
     }, 500);
 
@@ -69,7 +79,7 @@ export function useCpuTurn(
         clearTimeout(timerRef.current);
         timerRef.current = null;
       }
-      setIsCpuThinking(false);
+      setIsCpuThinkingRef.current(false);
     };
-  }, [state, config, isGameOver, onMove, setIsCpuThinking]);
+  }, [state, config, isGameOver]);
 }
