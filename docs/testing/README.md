@@ -539,38 +539,6 @@ describe('rules', () => {
 
 ## CI/CD統合
 
-### GitHub Actions 設定例
-
-```yaml
-name: Test
-
-on: [push, pull_request]
-
-jobs:
-  test:
-    runs-on: ubuntu-latest
-
-    steps:
-      - uses: actions/checkout@v3
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '24'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run tests
-        run: npm test
-
-      - name: Check coverage
-        run: npm run test:coverage
-
-      - name: Upload coverage
-        uses: codecov/codecov-action@v3
-```
-
 **セキュリティに関する注意:** 本番環境では、サードパーティアクションを特定のコミットSHAでピン留めすることを推奨します（例: `codecov/codecov-action@54bcd8715eee62d40e33596ef5e8f0f48dbbccab`）。これにより、タグが改変された場合のサプライチェーン攻撃を防ぎます。
 
 **注意:** このサンプルは `package.json` に以下のスクリプトが定義されていることを前提としています：
