@@ -1,0 +1,48 @@
+#!/bin/sh
+#
+# Git hook to help generate commit messages with GitHub Copilot
+# This hook provides context for Copilot to suggest better commit messages
+#
+# To install this hook:
+#   cp .github/hooks/prepare-commit-msg .git/hooks/prepare-commit-msg
+#   chmod +x .git/hooks/prepare-commit-msg
+#
+# Or configure git to use this hooks directory:
+#   git config core.hooksPath .github/hooks
+
+COMMIT_MSG_FILE=$1
+COMMIT_SOURCE=$2
+SHA1=$3
+
+# Only run for regular commits (not merge, squash, etc.)
+if [ -z "$COMMIT_SOURCE" ] || [ "$COMMIT_SOURCE" = "message" ]; then
+  # Get the diff of staged changes
+  STAGED_DIFF=$(git diff --cached --stat)
+
+  # If there are staged changes and the commit message is empty or default
+  if [ -n "$STAGED_DIFF" ] && ([ ! -s "$COMMIT_MSG_FILE" ] || grep -q "^#" "$COMMIT_MSG_FILE"); then
+    # Add helpful context as comments that Copilot can read
+    cat >> "$COMMIT_MSG_FILE" << EOF
+
+# コミットメッセージのガイドライン:
+# - 1行目: 必ず先頭大文字の英語で記述
+# - プレフィックス（feat:, fix: など）は不要
+# - 変更内容を簡潔に記述
+# - ピリオド、カンマ、接続詞はできるだけ避ける
+# - 1文でかつ50文字以内に収める
+#
+# Commit message guidelines:
+# - First line: Must start with capital letter in English
+# - No prefix (feat:, fix:, etc.) needed
+# - Describe changes concisely
+# - Avoid periods, commas, and conjunctions
+# - Keep it to one sentence under 50 characters
+#
+# ステージされた変更 / Staged changes:
+$(printf '%s\n' "$STAGED_DIFF" | head -20 | sed 's/^/# /')
+#
+# GitHub Copilotを使用して、上記の変更に基づいて適切なコミットメッセージを生成できます。
+# You can use GitHub Copilot to generate an appropriate commit message based on the changes above.
+EOF
+  fi
+fi

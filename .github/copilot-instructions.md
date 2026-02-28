@@ -52,9 +52,12 @@ This is an Othello (Reversi) game implementation using Next.js 16, React 19, Typ
 - Optimize re-renders in game state updates
 
 ## Commit Messages
-- Use conventional commits format: `type(scope): message`
-- Types: feat, fix, docs, style, refactor, test, chore
-- Keep messages clear and concise
+- First line must start with a capital letter in English
+- No prefix (feat:, fix:, etc.) needed
+- Describe changes concisely in one sentence
+- Avoid periods, commas, and conjunctions in the first line
+- Keep first line under 50 characters
+- When generating commit messages, analyze the staged changes and provide context-aware suggestions
 
 ## Best Practices
 - Keep functions small and focused

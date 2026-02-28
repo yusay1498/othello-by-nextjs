@@ -58,30 +58,32 @@ git checkout -b fix/your-fix-name
 - Use meaningful variable and function names
 
 ### Commit Messages
-Follow conventional commits format:
-```
-type(scope): description
+Follow this commit message format:
 
-[optional body]
-
-[optional footer]
-```
-
-Types:
-- `feat`: New feature
-- `fix`: Bug fix
-- `docs`: Documentation changes
-- `style`: Code style changes (formatting, etc.)
-- `refactor`: Code refactoring
-- `test`: Adding or updating tests
-- `chore`: Maintenance tasks
+**First line:**
+- Must start with a capital letter in English
+- No prefix (feat:, fix:, etc.) needed
+- Describe changes concisely in one sentence
+- Avoid periods, commas, and conjunctions
+- Keep under 50 characters
 
 Examples:
 ```
-feat(game): add move validation logic
-fix(board): correct piece flip calculation
-docs(readme): update installation instructions
+Add move validation logic
+Correct piece flip calculation
+Update installation instructions
 ```
+
+#### Using GitHub Copilot for Commit Messages
+You can use GitHub Copilot to help generate commit messages. See [.github/COPILOT_COMMIT_GUIDE.md](.github/COPILOT_COMMIT_GUIDE.md) for detailed instructions.
+
+Quick setup:
+```bash
+# Enable git hooks that work with Copilot
+git config core.hooksPath .github/hooks
+```
+
+Then when you commit, Copilot will help suggest appropriate commit messages based on your staged changes.
 
 ### Submitting a Pull Request
 1. Push your branch to your fork:

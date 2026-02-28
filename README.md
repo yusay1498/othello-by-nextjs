@@ -87,6 +87,10 @@ pnpm dev
 
 コントリビューションを歓迎します！詳細については[CONTRIBUTING.md](CONTRIBUTING.md)をお読みください。
 
+### GitHub Copilotでコミットメッセージを生成
+
+GitHub Copilotを使用してコミットメッセージを自動生成できます。詳しくは[Copilotコミットガイド](.github/COPILOT_COMMIT_GUIDE.md)をご覧ください。
+
 ## 📄 ライセンス
 
 このプロジェクトはMITライセンスの下でライセンスされています。詳細は[LICENSE](LICENSE)ファイルを参照してください。
