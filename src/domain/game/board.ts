@@ -2,17 +2,26 @@ import { TOTAL_CELLS } from "./constants";
 import type { Board, Player } from "./types";
 
 /**
+ * Initial piece positions for standard Othello starting position
+ * Based on 8x8 board center (d4, e4, d5, e5)
+ */
+const INITIAL_WHITE_TOP_LEFT = 27; // d4
+const INITIAL_BLACK_TOP_RIGHT = 28; // e4
+const INITIAL_BLACK_BOTTOM_LEFT = 35; // d5
+const INITIAL_WHITE_BOTTOM_RIGHT = 36; // e5
+
+/**
  * Creates the initial Othello board with the standard starting position
  * @returns A 64-cell board with the initial 4 pieces placed in the center
  */
 export function createInitialBoard(): Board {
-  const board: Board = new Array(TOTAL_CELLS).fill(null);
+  const board: Board = Array.from({ length: TOTAL_CELLS }, () => null);
 
   // Set initial center pieces
-  board[27] = "white"; // d4
-  board[28] = "black"; // e4
-  board[35] = "black"; // d5
-  board[36] = "white"; // e5
+  board[INITIAL_WHITE_TOP_LEFT] = "white";
+  board[INITIAL_BLACK_TOP_RIGHT] = "black";
+  board[INITIAL_BLACK_BOTTOM_LEFT] = "black";
+  board[INITIAL_WHITE_BOTTOM_RIGHT] = "white";
 
   return board;
 }

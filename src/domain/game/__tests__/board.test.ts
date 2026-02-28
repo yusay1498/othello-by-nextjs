@@ -1,11 +1,12 @@
 import { describe, expect, test } from "vitest";
 import { createInitialBoard, getOpponent, getScore } from "../board";
-import type { Player } from "../types";
+import { TOTAL_CELLS } from "../constants";
+import type { Board, Player } from "../types";
 
 describe("createInitialBoard", () => {
   test("should return an array of 64 cells", () => {
     const board = createInitialBoard();
-    expect(board).toHaveLength(64);
+    expect(board).toHaveLength(TOTAL_CELLS);
   });
 
   test("should have correct initial placement", () => {
@@ -45,25 +46,25 @@ describe("getScore", () => {
   });
 
   test("should return 0-0 for empty board", () => {
-    const board = new Array(64).fill(null);
+    const board: Board = Array.from({ length: TOTAL_CELLS }, () => null);
     const score = getScore(board);
     expect(score).toEqual({ black: 0, white: 0 });
   });
 
   test("should count only black pieces on all-black board", () => {
-    const board = new Array(64).fill("black");
+    const board: Board = Array.from({ length: TOTAL_CELLS }, () => "black");
     const score = getScore(board);
-    expect(score).toEqual({ black: 64, white: 0 });
+    expect(score).toEqual({ black: TOTAL_CELLS, white: 0 });
   });
 
   test("should count only white pieces on all-white board", () => {
-    const board = new Array(64).fill("white");
+    const board: Board = Array.from({ length: TOTAL_CELLS }, () => "white");
     const score = getScore(board);
-    expect(score).toEqual({ black: 0, white: 64 });
+    expect(score).toEqual({ black: 0, white: TOTAL_CELLS });
   });
 
   test("should correctly count mixed board", () => {
-    const board = new Array(64).fill(null);
+    const board: Board = Array.from({ length: TOTAL_CELLS }, () => null);
     board[0] = "black";
     board[1] = "black";
     board[2] = "white";
