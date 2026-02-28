@@ -2,8 +2,8 @@ import { TOTAL_CELLS } from "./constants";
 import type { Board, Player } from "./types";
 
 /**
- * Initial piece positions for standard Othello starting position
- * Based on 8x8 board center (d4, e4, d5, e5)
+ * オセロの初期石配置の位置
+ * 8x8ボードの中央（d4、e4、d5、e5）に基づく
  */
 const INITIAL_WHITE_TOP_LEFT = 27; // d4
 const INITIAL_BLACK_TOP_RIGHT = 28; // e4
@@ -11,13 +11,13 @@ const INITIAL_BLACK_BOTTOM_LEFT = 35; // d5
 const INITIAL_WHITE_BOTTOM_RIGHT = 36; // e5
 
 /**
- * Creates the initial Othello board with the standard starting position
- * @returns A 64-cell board with the initial 4 pieces placed in the center
+ * 標準的な初期配置でオセロボードを作成する
+ * @returns 中央に4つの石が配置された64マスのボード
  */
 export function createInitialBoard(): Board {
   const board: Board = Array.from({ length: TOTAL_CELLS }, () => null);
 
-  // Set initial center pieces
+  // 中央の初期配置を設定
   board[INITIAL_WHITE_TOP_LEFT] = "white";
   board[INITIAL_BLACK_TOP_RIGHT] = "black";
   board[INITIAL_BLACK_BOTTOM_LEFT] = "black";
@@ -27,9 +27,9 @@ export function createInitialBoard(): Board {
 }
 
 /**
- * Calculates the score (number of pieces) for each player
- * @param board - The board to calculate scores for
- * @returns An object containing the count of black and white pieces
+ * 各プレイヤーのスコア（石の数）を計算する
+ * @param board - スコアを計算するボード
+ * @returns 黒石と白石の数を含むオブジェクト
  */
 export function getScore(board: Board): { black: number; white: number } {
   return board.reduce(
@@ -43,9 +43,9 @@ export function getScore(board: Board): { black: number; white: number } {
 }
 
 /**
- * Gets the opponent player
- * @param player - The current player
- * @returns The opponent player
+ * 相手プレイヤーを取得する
+ * @param player - 現在のプレイヤー
+ * @returns 相手プレイヤー
  */
 export function getOpponent(player: Player): Player {
   return player === "black" ? "white" : "black";

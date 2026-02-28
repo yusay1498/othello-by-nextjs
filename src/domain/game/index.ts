@@ -1,4 +1,4 @@
-// Type exports
+// 型のエクスポート
 export type {
   Player,
   Cell,
@@ -6,8 +6,8 @@ export type {
   Position,
 } from './types';
 
-// Constant exports
+// 定数のエクスポート
 export { BOARD_SIZE, TOTAL_CELLS } from './constants';
 
-// Board function exports
+// ボード関数のエクスポート
 export { createInitialBoard, getScore, getOpponent } from './board';
