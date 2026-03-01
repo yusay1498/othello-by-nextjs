@@ -17,7 +17,7 @@ describe("Cell", () => {
       <Cell index={0} value="black" isLegal={false} onCellClick={vi.fn()} disabled={false} />
     );
 
-    const button = screen.getByLabelText("黒石");
+    const button = screen.getByLabelText("黒猫");
     expect(button).toBeInTheDocument();
   });
 
@@ -26,7 +26,7 @@ describe("Cell", () => {
       <Cell index={0} value="white" isLegal={false} onCellClick={vi.fn()} disabled={false} />
     );
 
-    const button = screen.getByLabelText("白石");
+    const button = screen.getByLabelText("白猫");
     expect(button).toBeInTheDocument();
   });
 

@@ -36,8 +36,8 @@ describe("Board", () => {
     );
 
     // 初期配置: 27=白, 28=黒, 35=黒, 36=白
-    const blackStones = screen.getAllByLabelText("黒石");
-    const whiteStones = screen.getAllByLabelText("白石");
+    const blackStones = screen.getAllByLabelText("黒猫");
+    const whiteStones = screen.getAllByLabelText("白猫");
 
     expect(blackStones).toHaveLength(2);
     expect(whiteStones).toHaveLength(2);
