@@ -43,13 +43,14 @@ export const Cell = memo(function Cell({ index, value, isLegal, onCellClick, dis
     >
       {/* 石の表示（猫の画像） */}
       {value && (
-        <div className="w-16 h-16">
+        <div className="relative w-[80%] h-[80%]">
           <Image
             src={value === "black" ? blackCatImage : whiteCatImage}
-            alt={value === "black" ? "黒猫" : "白猫"}
-            width={64}
-            height={64}
-            className="w-full h-full object-contain"
+            alt=""
+            fill
+            sizes="100%"
+            className="object-contain"
+            aria-hidden
           />
         </div>
       )}
