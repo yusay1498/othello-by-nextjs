@@ -1,5 +1,8 @@
 import { memo } from "react";
+import Image from "next/image";
 import type { Cell as CellType, Position } from "@/domain/game/types";
+import blackCatImage from "@/assets/images/black-cat.png";
+import whiteCatImage from "@/assets/images/white-cat.png";
 
 interface CellProps {
   index: Position;
@@ -30,23 +33,26 @@ export const Cell = memo(function Cell({ index, value, isLegal, onCellClick, dis
       `}
       aria-label={
         value === "black"
-          ? "黒石"
+          ? "黒猫"
           : value === "white"
-          ? "白石"
+          ? "白猫"
           : isLegal
           ? "合法手"
           : "空きマス"
       }
     >
-      {/* 石の表示 */}
+      {/* 石の表示（猫の画像） */}
       {value && (
-        <div
-          className={`
-            w-[85%] h-[85%] rounded-full
-            ${value === "black" ? "bg-gray-900" : "bg-white"}
-            shadow-md
-          `}
-        />
+        <div className="relative w-[80%] h-[80%]">
+          <Image
+            src={value === "black" ? blackCatImage : whiteCatImage}
+            alt=""
+            fill
+            sizes="100%"
+            className="object-contain"
+            aria-hidden
+          />
+        </div>
       )}
 
       {/* 合法手の表示 */}
